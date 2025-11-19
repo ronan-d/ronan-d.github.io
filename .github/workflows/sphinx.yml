@@ -31,13 +31,17 @@ jobs:
           submodules: true
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Install Sphinx
+        run: |
+          sudo apt update
+          sudo apt install -y python3-sphinx
       - name: Build with Sphinx
-        uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "./"
-          build-command: "sphinx-build -M html . _build"
+        run: |
+          sphinx-build -M html . _build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build/
 
   # Deployment job
   deploy:
