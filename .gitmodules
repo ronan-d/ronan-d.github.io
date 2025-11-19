@@ -1,0 +1,3 @@
+[submodule "single-page-sphinx-theme"]
+	path = single-page-sphinx-theme
+	url = git@github.com:ronan-d/single-page-sphinx-theme.git
