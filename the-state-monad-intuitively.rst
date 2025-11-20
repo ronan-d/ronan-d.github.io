@@ -33,7 +33,11 @@ Here's one way to proceed:
 
    fn fib_with_counter(n: u64, is_even: &mut bool) -> u64 {
        *is_even = !*is_even;
-       if n <= 1 { 1 } else { fib(n - 1) + fib(n - 2) }
+       if n <= 1 {
+           1
+       } else {
+           fib_with_counter(n - 1, is_even) + fib_with_counter(n - 2, is_even)
+       }
    }
 
 You can call this function like so:
@@ -78,15 +82,23 @@ to
    (n : Nat) : :strong:`StateM Bool` Nat
 
 This looks rather different from what we did in Rust. Here, the parameters don't change, it's the return type that does.
+Instead of adding a mutable reference to ``bool`` as parameter, we made our return type ``StateM Bool Nat``.
+
+OK, now let's see the entire function.
 
 .. code-block:: lean
 
-   def fib_with_counter (n : Nat) : StateM Nat Nat := do
-     let count ← get
-     set (count + 1)
+   def fib_with_counter (n : Nat) : StateM Bool Nat := do
+     let is_even ← get
+     set (!is_even)
      if n <= 1 then
        pure 1
-     else do
+     else
        let f1 ← fib_with_counter (n - 1)
        let f2 ← fib_with_counter (n - 2)
        pure (f1 + f2)
+
+It's not quite as concise as the Rust version, to say the least. In particular, the
+recursive case went from
+
+.. code-block:: rust
