@@ -6,9 +6,9 @@ In short, it makes it possible to simulate an implicit state that can be mutated
 the program makes progress, even in programming languages that don't have mutable variables.
 
 There exist detailed explanations of the state monad, like `this one`__. However,
-it took a while for me for the concept to click. What worked for me in the end
-is picturing a translation scheme from programs that use the state monads to equivalent
-programs written in a imperative language. I'll now say more about this translation
+it took a while for me for the concept to click. What worked in the end
+was picturing a translation scheme from programs that use the state monads to equivalent
+programs written in an imperative language. I'll now say more about this translation
 scheme.
 
 .. __: https://en.wikibooks.org/wiki/Haskell/Understanding_monads/State#
@@ -17,7 +17,7 @@ How we use state in imperative languages
 ----------------------------------------
 
 We begin the analogy on the imperative side, with examples given in Rust. Say that
-you have a function that computes the Fibonacci numbers:
+you have a function that computes the nth Fibonacci number:
 
 .. code-block:: rust
 
