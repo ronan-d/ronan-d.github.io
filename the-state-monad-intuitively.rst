@@ -67,7 +67,7 @@ the signature of the original Rust function was
 
 and that to add the call counter to it, we changed it to
 
-   (n: u64\ :strong:`, count: &mut u64`) -> u64
+   (n: u64\ :strong:`, is_even: &mut bool`) -> u64
 
 In Lean, we're going to go from
 
@@ -75,7 +75,7 @@ In Lean, we're going to go from
 
 to
 
-   (n : Nat) : :strong:`StateM Nat Nat`
+   (n : Nat) : :strong:`StateM Bool` Nat
 
 This looks rather different from what we did in Rust. Here, the parameters don't change, it's the return type that does.
 
