@@ -63,9 +63,19 @@ the signature of the original Rust function was
 
    (n: u64) -> u64
 
-and that to add the call counter to it, we changed it to:
+and that to add the call counter to it, we changed it to
 
-   (n: u64\ :strong:`, count: &mut u64*`) -> u64
+   (n: u64\ :strong:`, count: &mut u64`) -> u64
+
+In Lean, we're going to go from
+
+   (n : Nat) : Nat
+
+to
+
+   (n : Nat) : :strong:`StateM Nat Nat`
+
+This looks rather different from what we did in Rust. Here, the parameters don't change, it's the return type that does.
 
 .. code-block:: lean
 
