@@ -26,12 +26,13 @@ you have a function that computes the nth Fibonacci number:
    }
 
 Now, say that in addition to getting the nth Fibonacci number, you also want to
-get the number of recursive calls it took to compute it. Here's one way to proceed:
+return whether the number of recursive calls it took to compute it is even.
+Here's one way to proceed:
 
 .. code-block:: rust
 
-   fn fib_with_counter(n: u64, count: &mut u64) -> u64 {
-       *count += 1;
+   fn fib_with_counter(n: u64, is_even: &mut bool) -> u64 {
+       *is_even = !*is_even;
        if n <= 1 { 1 } else { fib(n - 1) + fib(n - 2) }
    }
 
@@ -39,10 +40,11 @@ You can call this function like so:
 
 .. code-block:: rust
 
-   let mut count = 0;
-   let f = fib_with_counter(10, &mut count);
+   let mut is_even = true;
+   let f = fib_with_counter(10, &mut is_even);
 
-What we changed from the original function is that we added a new parameter that's a mutable reference.
+What we changed from the original function is that we added a new parameter that's a mutable reference
+to a ``bool``, and we flip that ``bool`` on entry to the function.
 
 Same thing, (pure) functional language
 --------------------------------------
