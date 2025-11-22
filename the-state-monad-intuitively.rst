@@ -13,7 +13,7 @@ the program makes progress, even in programming languages that don't have mutabl
 
 There exist detailed explanations of the state monad, like `this one`__. However,
 it took a while for me before the concept clicked. What worked in the end
-was picturing a translation scheme from programs that use the state monads to equivalent
+was picturing a translation scheme from programs that use state monads to equivalent
 programs written in an imperative language. I'll now say more about this translation
 scheme.
 
