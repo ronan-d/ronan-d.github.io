@@ -137,3 +137,18 @@ we need it to give the initial value for the state and also "unwrap" the
 
 Note in particular the call to the :lean:`run` method with the initial value of the
 state as argument.
+
+Takeaways
+---------
+
+I think the above comparison clears up something about the state monad the can be
+counterintuitive: making the return type of a function more complicated (e.g. by changing it
+from :lean:`Nat` so :lean:`StateM Nat Bool`) actually makes the function's job easier (because
+it gives it access to a piece of mutable state). I don't think that's very common
+outside monadic-ish environment.
+
+One situation this knowledge is helpful is when one, for a reason or another, is
+programming in a pure functional language and finds that mutable state would be
+helpful to achieve something. It suffices to imagine an imperative program that uses
+the state passing a mutable reference around, and then the translation scheme above
+can help devise an equivalent program that uses a state monad.
