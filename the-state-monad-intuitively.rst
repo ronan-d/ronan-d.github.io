@@ -126,8 +126,8 @@ way around. In the Rust version, the order of evaluation is not specified, and i
 a problem because the two possible orderings have the same overall effect on the mutable :rust:`bool`.
 
 Using :lean:`fib_with_parity` in Lean also takes a bit more than a function call,
-we need it to give the initial value for the state and also "unwrap" the
-:lean:`StateM Bool Nat` at the end. Here's how it's done:
+we need to "unwrap" the :lean:`StateM Bool Nat` by providing it with the initial
+value of the state. Here's how it's done:
 
 .. code-block:: lean
 
@@ -135,26 +135,25 @@ we need it to give the initial value for the state and also "unwrap" the
    def f := pair.fst
    def count := pair.snd
 
-Note in particular the call to the :lean:`run` method with the initial value of the
-state as argument.
+We call the :lean:`run` method with the initial value of the state as argument.
 
 Takeaways
 ---------
 
 I think the above comparison clears up something about the state monad the can be
 counterintuitive: making the return type of a function more complicated (e.g. by changing it
-from :lean:`Nat` so :lean:`StateM Nat Bool`) actually makes the function's job easier (because
+from :lean:`Nat` so :lean:`StateM Bool Nat`) actually makes the function's job easier (because
 it gives it access to a piece of mutable state). I don't think that's very common
-outside monadic-ish environment.
+outside of monadic-ish environments.
 
-One situation this knowledge is helpful is when one, for a reason or another, is
-programming in a pure functional language and finds that mutable state would be
+One situation this knowledge is helpful is when you, for a reason or another, are
+programming in a pure functional language and find that mutable state would be
 helpful to achieve something. It suffices to imagine an imperative program that uses
 the state passing a mutable reference around, and then the translation scheme above
 can help devise an equivalent program that uses a state monad.
 
-Another situation is when one is required by an interface to provide a function
-that returns a state monad\ [#f1]_. One's immediate reaction to the lengthy return type
+Another situation is when you're required by an interface to provide a function
+that returns a state monad\ [#f1]_. Your immediate reaction to the lengthy return type
 might be to think that writing the function will be quite complicated, while it's
 in fact the contrary: the function will be able to query some piece of state to
 do its job.
