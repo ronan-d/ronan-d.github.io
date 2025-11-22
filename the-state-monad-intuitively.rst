@@ -131,7 +131,7 @@ value of the state. Here's how it's done:
 
 .. code-block:: lean
 
-   def pair := (fib_with_counter 10).run false
+   def pair := (fib_with_parity 10).run false
    def f := pair.fst
    def count := pair.snd
 
@@ -140,7 +140,7 @@ We call the :lean:`run` method with the initial value of the state as argument.
 Takeaways
 ---------
 
-I think the above comparison clears up something about the state monad the can be
+I think the above comparison clears up something about the state monad that can be
 counterintuitive: making the return type of a function more complicated (e.g. by changing it
 from :lean:`Nat` so :lean:`StateM Bool Nat`) actually makes the function's job easier (because
 it gives it access to a piece of mutable state). I don't think that's very common
@@ -160,5 +160,5 @@ do its job.
 
 .. rubric:: Footnotes
 
-.. [#f1] One such situation I came across recently is writing Lean metaprogramming code, when
+.. [#f1] One such situation I came across recently is writing Lean metaprogramming code, where
          functions must return :lean:`CoreM` monads.
