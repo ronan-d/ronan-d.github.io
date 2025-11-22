@@ -12,7 +12,7 @@ In short, it makes it possible to simulate implicit state that can be mutated as
 the program makes progress, even in programming languages that don't have mutable variables.
 
 There exist detailed explanations of the state monad, like `this one`__. However,
-it took a while for me for the concept to click. What worked in the end
+it took a while for me before the concept clicked. What worked in the end
 was picturing a translation scheme from programs that use the state monads to equivalent
 programs written in an imperative language. I'll now say more about this translation
 scheme.
@@ -154,7 +154,12 @@ the state passing a mutable reference around, and then the translation scheme ab
 can help devise an equivalent program that uses a state monad.
 
 Another situation is when one is required by an interface to provide a function
-that returns a state monad. One's immediate reaction to the lengthy return type
+that returns a state monad\ [#f1]_. One's immediate reaction to the lengthy return type
 might be to think that writing the function will be quite complicated, while it's
 in fact the contrary: the function will be able to query some piece of state to
 do its job.
+
+.. rubric:: Footnotes
+
+.. [#f1] One such situation I came across recently is writing Lean metaprogramming code, when
+         functions must return :lean:`CoreM` monads.
