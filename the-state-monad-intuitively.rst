@@ -152,3 +152,9 @@ programming in a pure functional language and finds that mutable state would be
 helpful to achieve something. It suffices to imagine an imperative program that uses
 the state passing a mutable reference around, and then the translation scheme above
 can help devise an equivalent program that uses a state monad.
+
+Another situation is when one is required by an interface to provide a function
+that returns a state monad. One's immediate reaction to the lengthy return type
+might be to think that writing the function will be quite complicated, while it's
+in fact the contrary: the function will be able to query some piece of state to
+do its job.
