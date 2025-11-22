@@ -46,7 +46,7 @@ Here's one way to proceed:
        }
    }
 
-You can call this function like so:
+You can call this function like this:
 
 .. code-block:: rust
 
@@ -70,7 +70,7 @@ Like in the previous section, we now want to also get the parity of the total nu
 We cannot add a mutable reference as parameter like we did in Rust, but we'll do
 something analogous using the state monad in Lean's standard library, :lean:`StateM`.
 
-Let concentrate our attention to the function's type for the moment. Recall that
+Let's concentrate our attention to the function's type for the moment. Recall that
 the signature of the original Rust function was
 
    (n: u64) -> u64
@@ -105,7 +105,7 @@ OK, now let's see the entire function.
        pure (f1 + f2)
 
 It's not quite as concise as the Rust version, to say the least. In particular, the
-recursive case went from
+recursive case went from the one-liner
 
 .. code-block:: rust
 
@@ -123,7 +123,7 @@ There is one interesting thing here: since the recursive calls "have effects", L
 to clearly specify in what order the recursive calls are evaluated. We either evaluate
 :lean:`fib_with_parity (n - 1)` first and :lean:`fib_with_parity (n - 2)` second, or the other
 way around. In the Rust version, the order of evaluation is not specified, and it is not
-a problem because the two possible orderings have the same effect on the mutable :rust:`bool`.
+a problem because the two possible orderings have the same overall effect on the mutable :rust:`bool`.
 
 Using :lean:`fib_with_parity` in Lean also takes a bit more than a function call,
 we need it to give the initial value for the state and also "unwrap" the
