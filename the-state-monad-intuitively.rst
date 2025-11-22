@@ -121,4 +121,6 @@ to
 
 There is one interesting thing here: since the recursive calls "have effects", Lean forces
 to clearly specify in what order the recursive calls are evaluated. We either evaluate
-``
+:lean:`fib_with_counter (n - 1)` first and :lean:`fib_with_counter (n - 2)` second, or the other
+way around. In the Rust version, the order of evaluation is not specified, and it is not
+a problem because the two possible orderings have the same effect on the mutable :rust:`bool`.
