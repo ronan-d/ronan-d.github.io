@@ -8,7 +8,7 @@ The state monad, intuitively
    :language: lean
 
 In functional programming languages, there is an idiom called the "state monad".
-In short, it makes it possible to simulate an implicit state that can be mutated as
+In short, it makes it possible to simulate implicit state that can be mutated as
 the program makes progress, even in programming languages that don't have mutable variables.
 
 There exist detailed explanations of the state monad, like `this one`__. However,
