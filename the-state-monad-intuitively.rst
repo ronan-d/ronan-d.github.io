@@ -7,7 +7,7 @@ The state monad, intuitively
 .. role:: lean(code)
    :language: lean
 
-In functional programming languages, there's is an idiom called the "state monad".
+In functional programming languages, there is an idiom called the "state monad".
 In short, it makes it possible to simulate an implicit state that can be mutated as
 the program makes progress, even in programming languages that don't have mutable variables.
 
