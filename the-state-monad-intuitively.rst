@@ -1,6 +1,12 @@
 The state monad, intuitively
 ============================
 
+.. role:: rust(code)
+   :language: rust
+
+.. role:: lean(code)
+   :language: lean
+
 In functional programming languages, there's is an idiom called the "state monad".
 In short, it makes it possible to simulate an implicit state that can be mutated as
 the program makes progress, even in programming languages that don't have mutable variables.
@@ -48,7 +54,7 @@ You can call this function like so:
    let f = fib_with_counter(10, &mut is_even);
 
 What we changed from the original function is that we added a new parameter that's a mutable reference
-to a ``bool``, and we flip that ``bool`` on entry to the function.
+to a :rust:`bool`, and we flip that :rust:`bool` on entry to the function.
 
 Same thing, (pure) functional language
 --------------------------------------
@@ -60,9 +66,9 @@ Here's the function we use as a starting point, in Lean this time:
    def fib (n : Nat) : Nat :=
      if n <= 1 then 1 else fib (n - 1) + fib (n - 2)
 
-Like in the previous section, we now want to also get the total number of calls that were made.
+Like in the previous section, we now want to also get the parity of the total number of calls that were made.
 We cannot add a mutable reference as parameter like we did in Rust, but we'll do
-something analogous the state monad in Lean's standard library, ``StateM``.
+something analogous the state monad in Lean's standard library, :lean:`StateM`.
 
 Let concentrate our attention to the function's type for the moment. Recall that
 the signature of the original Rust function was
@@ -82,7 +88,7 @@ to
    (n : Nat) : :strong:`StateM Bool` Nat
 
 This looks rather different from what we did in Rust. Here, the parameters don't change, it's the return type that does.
-Instead of adding a mutable reference to ``bool`` as parameter, we made our return type ``StateM Bool Nat``.
+Instead of adding a mutable reference to :rust:`bool` as parameter, we made our return type :lean:`StateM Bool Nat`.
 
 OK, now let's see the entire function.
 
@@ -102,3 +108,17 @@ It's not quite as concise as the Rust version, to say the least. In particular, 
 recursive case went from
 
 .. code-block:: rust
+
+   fib_with_counter(n - 1, is_even) + fib_with_counter(n - 2, is_even)
+
+to
+
+.. code-block:: lean
+
+   let f1 ← fib_with_counter (n - 1)
+   let f2 ← fib_with_counter (n - 2)
+   pure (f1 + f2)
+
+There is one interesting thing here: since the recursive calls "have effects", Lean forces
+to clearly specify in what order the recursive calls are evaluated. We either evaluate
+``
