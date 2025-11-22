@@ -124,3 +124,16 @@ to clearly specify in what order the recursive calls are evaluated. We either ev
 :lean:`fib_with_parity (n - 1)` first and :lean:`fib_with_parity (n - 2)` second, or the other
 way around. In the Rust version, the order of evaluation is not specified, and it is not
 a problem because the two possible orderings have the same effect on the mutable :rust:`bool`.
+
+Using :lean:`fib_with_parity` in Lean also takes a bit more than a function call,
+we need it to give the initial value for the state and also "unwrap" the
+:lean:`StateM Bool Nat` at the end. Here's how it's done:
+
+.. code-block:: lean
+
+   def pair := (fib_with_counter 10).run false
+   def f := pair.fst
+   def count := pair.snd
+
+Note in particular the call to the :lean:`run` method with the initial value of the
+state as argument.
