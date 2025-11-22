@@ -37,12 +37,12 @@ Here's one way to proceed:
 
 .. code-block:: rust
 
-   fn fib_with_counter(n: u64, is_even: &mut bool) -> u64 {
+   fn fib_with_parity(n: u64, is_even: &mut bool) -> u64 {
        *is_even = !*is_even;
        if n <= 1 {
            1
        } else {
-           fib_with_counter(n - 1, is_even) + fib_with_counter(n - 2, is_even)
+           fib_with_parity(n - 1, is_even) + fib_with_parity(n - 2, is_even)
        }
    }
 
@@ -51,7 +51,7 @@ You can call this function like so:
 .. code-block:: rust
 
    let mut is_even = true;
-   let f = fib_with_counter(10, &mut is_even);
+   let f = fib_with_parity(10, &mut is_even);
 
 What we changed from the original function is that we added a new parameter that's a mutable reference
 to a :rust:`bool`, and we flip that :rust:`bool` on entry to the function.
@@ -68,7 +68,7 @@ Here's the function we use as a starting point, in Lean this time:
 
 Like in the previous section, we now want to also get the parity of the total number of calls that were made.
 We cannot add a mutable reference as parameter like we did in Rust, but we'll do
-something analogous the state monad in Lean's standard library, :lean:`StateM`.
+something analogous using the state monad in Lean's standard library, :lean:`StateM`.
 
 Let concentrate our attention to the function's type for the moment. Recall that
 the signature of the original Rust function was
@@ -94,14 +94,14 @@ OK, now let's see the entire function.
 
 .. code-block:: lean
 
-   def fib_with_counter (n : Nat) : StateM Bool Nat := do
+   def fib_with_parity (n : Nat) : StateM Bool Nat := do
      let is_even ← get
      set (!is_even)
      if n <= 1 then
        pure 1
      else
-       let f1 ← fib_with_counter (n - 1)
-       let f2 ← fib_with_counter (n - 2)
+       let f1 ← fib_with_parity (n - 1)
+       let f2 ← fib_with_parity (n - 2)
        pure (f1 + f2)
 
 It's not quite as concise as the Rust version, to say the least. In particular, the
@@ -109,18 +109,18 @@ recursive case went from
 
 .. code-block:: rust
 
-   fib_with_counter(n - 1, is_even) + fib_with_counter(n - 2, is_even)
+   fib_with_parity(n - 1, is_even) + fib_with_parity(n - 2, is_even)
 
 to
 
 .. code-block:: lean
 
-   let f1 ← fib_with_counter (n - 1)
-   let f2 ← fib_with_counter (n - 2)
+   let f1 ← fib_with_parity (n - 1)
+   let f2 ← fib_with_parity (n - 2)
    pure (f1 + f2)
 
 There is one interesting thing here: since the recursive calls "have effects", Lean forces
 to clearly specify in what order the recursive calls are evaluated. We either evaluate
-:lean:`fib_with_counter (n - 1)` first and :lean:`fib_with_counter (n - 2)` second, or the other
+:lean:`fib_with_parity (n - 1)` first and :lean:`fib_with_parity (n - 2)` second, or the other
 way around. In the Rust version, the order of evaluation is not specified, and it is not
 a problem because the two possible orderings have the same effect on the mutable :rust:`bool`.
