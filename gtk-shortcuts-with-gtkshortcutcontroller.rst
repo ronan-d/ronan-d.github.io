@@ -1,10 +1,27 @@
 GTK shortcuts with GtkShortcutController
 ========================================
 
+TODO is ``gtk_widget_add_binding`` easier than all this?
+
 I use GTK to write applications that make heavy use of keyboard shortcuts, sometimes even
 making them the only interface. I used to use GTK "accelerators" to set up keyboard shortcuts,
-but I recently discovered another way using ``GtkShortcut`` which I believe is nicer but
-is not really advertised by the GTK documentation.
+but I recently discovered another way using ``GtkShortcut`` which I believe is nicer but whose
+use is somewhat discouraged by the GTK documentation.
+
+Here are a few examples where I think the GTK documentation scares the reader away from using ``GtkShortcut``:
+
+- In `the overview section about keyboard input`__, ``GtkShortcut`` is said to be used "under the hood",
+  implying that application writers should not use it.
+
+__ https://docs.gtk.org/gtk4/input-handling.html#keyboard-input
+
+- In `the description of GtkShortcutController`__, it's suggested that ``GtkShortcutController``
+  is generally only present under the hood.
+
+__ https://docs.gtk.org/gtk4/class.ShortcutController.html#description
+
+The point I'll try to make in this post is that ``GtkShortcutController`` & co are
+actually very nice to use and should perhaps be the preferred way to set up keyboard shortcuts.
 
 I use GTK to write keyboard-driven applications. GTK is generally a good tool for this kind of applications,
 but they're not the focus of the GTK documentation. This note is a supplement to the
