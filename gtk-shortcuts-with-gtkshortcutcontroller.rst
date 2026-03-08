@@ -23,6 +23,16 @@ __ https://docs.gtk.org/gtk4/class.ShortcutController.html#description
 The point I'll try to make in this post is that ``GtkShortcutController`` & co are
 actually very nice to use and should perhaps be the preferred way to set up keyboard shortcuts.
 
+A guiding example
+-----------------
+
+We'll set out to write `the first application example in the GTK documentation`__, with
+just a little something more: pressing the 'e' key must exit the application.
+
+__ https://docs.gtk.org/gtk4/getting_started.html#basics
+
+TODO review content below this line
+
 I use GTK to write keyboard-driven applications. GTK is generally a good tool for this kind of applications,
 but they're not the focus of the GTK documentation. This note is a supplement to the
 GTK documentation dedicated to writing keyboard-driven applications.
