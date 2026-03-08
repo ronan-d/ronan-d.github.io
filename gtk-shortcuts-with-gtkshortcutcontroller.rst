@@ -1,6 +1,11 @@
 GTK shortcuts with GtkShortcutController
 ========================================
 
+I use GTK to write applications that make heavy use of keyboard shortcuts, sometimes even
+making them the only interface. I used to use GTK "accelerators" to set up keyboard shortcuts,
+but I recently discovered another way using ``GtkShortcut`` which I believe is nicer but
+is not really advertised by the GTK documentation.
+
 I use GTK to write keyboard-driven applications. GTK is generally a good tool for this kind of applications,
 but they're not the focus of the GTK documentation. This note is a supplement to the
 GTK documentation dedicated to writing keyboard-driven applications.
