@@ -27,9 +27,16 @@ A guiding example
 -----------------
 
 We'll set out to write `the first application example in the GTK documentation`__, with
-just a little something more: pressing the 'e' key must exit the application.
+just a little something more: pressing :guilabel:`e` must exit the application.
 
 __ https://docs.gtk.org/gtk4/getting_started.html#basics
+
+Here's the code for the basic example:
+
+.. literalinclude:: gtk-shortcuts-with-gtkshortcutcontroller/initial.c
+   :language: c
+
+
 
 TODO review content below this line
 
