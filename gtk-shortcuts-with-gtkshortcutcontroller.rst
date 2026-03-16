@@ -1,7 +1,8 @@
 GTK shortcuts with GtkShortcutController
 ========================================
 
-TODO is ``gtk_widget_add_binding`` easier than all this?
+TODO is ``gtk_widget_add_binding`` easier than all this? No at least because it's not available to language
+bindings. It's the docs that say it's not, without explaining why.
 
 I use GTK to write applications that make heavy use of keyboard shortcuts, sometimes even
 making them the only interface. I used to use GTK "accelerators" to set up keyboard shortcuts,
@@ -38,6 +39,8 @@ Here's the code for the basic example:
 
 Option 1: using actions
 -----------------------
+
+
 
 TODO review content below this line
 
