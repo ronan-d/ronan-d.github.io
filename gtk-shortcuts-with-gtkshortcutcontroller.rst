@@ -36,7 +36,8 @@ Here's the code for the basic example:
 .. literalinclude:: gtk-shortcuts-with-gtkshortcutcontroller/initial.c
    :language: c
 
-
+Option 1: using actions
+-----------------------
 
 TODO review content below this line
 
