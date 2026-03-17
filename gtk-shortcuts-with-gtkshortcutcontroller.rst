@@ -40,6 +40,19 @@ Here's the code for the basic example:
 Option 1: using actions
 -----------------------
 
+Let's look at how I used to do things first. The key points are
+
+- :code:`GtkApplicationWindow` implements :code:`ActionMap` and its :code:`g_action_map_add_action_entries`
+  method.
+- :code:`GtkApplication` has :code:`gtk_application_set_accels_for_action`.
+
+With this, we can write our application as follows:
+
+.. literalinclude:: gtk-shortcuts-with-gtkshortcutcontroller/actions.c
+   :language: c
+
+It works, but there's something that really bothers me: we have to through a weird layer of
+indirection to connect the key to the callback. When we call :code:`gtk_application_set_accels_for_action`,
 
 
 TODO review content below this line
