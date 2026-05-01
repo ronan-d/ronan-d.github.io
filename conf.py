@@ -13,11 +13,15 @@ author = 'Ronan Desplanques'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+import os
+import sys
+
+sys.path.append(os.path.abspath("./_ext"))
+
+extensions = ["auto_index"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -25,4 +29,3 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme_path = ["."]
 html_theme = 'single-page-sphinx-theme'
-html_static_path = ['_static']
