@@ -32,3 +32,12 @@ element, we either:
 
 1. Put the element in our work-in-progress subsequence :code:`l1` (:code:`subseq_take`).
 2. Leave out the element (:code:`subseq_skip`).
+
+Exercise 1
+++++++++++
+
+Warm up to :code:`is_subseq` by proving the following theorem:
+
+.. code-block:: isabelle
+
+   theorem is_subseq_nil_l: "is_subseq Nil l"
