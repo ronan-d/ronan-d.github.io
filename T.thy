@@ -29,15 +29,18 @@ fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec (x1 # l1) (x2 # l2) = (if x1 = x2 then is_subseq_rec l1 l2 else is_subseq_rec l1 (x2 # l2))"
 
 theorem cons_not_subseq_nil: "\<not> is_subseq (x # l) Nil"
-  apply (induction rule: is_subseq.induct)
-
+  apply (auto elim: is_subseq.cases)
+  done
 
 theorem is_subseq_rec_correct: "is_subseq l1 l2 = is_subseq_rec l1 l2"
   apply (induction l1)
    apply (simp)
    apply (rule is_subseq_nil_l)
   apply (induction l2)
+   apply (simp)
+   apply (rule cons_not_subseq_nil)
   apply (simp)
+  apply (rule conjI)
 
 datatype presence_tag =
 OnlyLeft |
