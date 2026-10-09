@@ -32,6 +32,17 @@ theorem cons_not_subseq_nil: "\<not> is_subseq (x # l) Nil"
   apply (auto elim: is_subseq.cases)
   done
 
+thm is_subseq_rec.induct
+
+definition P1 :: "'a \<Rightarrow> 'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
+"P1 x l1 l2 = (is_subseq_rec l1 l2 \<longrightarrow> is_subseq_rec l1 (x # l2))
+               \<and> is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2"
+
+lemma is_subseq_rec_lemma1: "P1 x l1 l2"
+  apply (induction rule: is_subseq_rec.induct)
+    apply (simp_all add: P1_def)
+  
+
 theorem is_subseq_rec_correct: "is_subseq l1 l2 = is_subseq_rec l1 l2"
   apply (induction l1)
    apply (simp)
