@@ -72,25 +72,10 @@ assumption.
 exact (is_subseq_rec_ind P (x1 :: l1') l2' H H0 H1 H2).
 Defined.
 
-Lemma is_subseq_rec_app : forall x l1 l2,
-  is_subseq_rec (x :: l1) l2 = true <->
-    exists l3 l4, l2 = l3 ++ [x] ++ l4 /\ is_subseq_rec l1 l4 = true.
+Lemma is_subseq_rec_lemma1 x l1 l2 :
+  is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 Proof.
-  split; intros.
-  induction l2 as [| x2 l2'].
-  cbn in H.
-  discriminate.
-  cbn in H.
-  destruct (T_eq x x2).
 
-Qed.
-
-Lemma is_subseq_rec_lemma1 x1 l1' l2 :
-  is_subseq_rec (x1 :: l1') l2 = true -> is_subseq_rec l1' l2 = true.
-Proof.
-  destruct l2; intros.
-  cbn in H.
-  discriminate.
 Qed.
 
 Lemma is_subseq_rec_lemma2 l1 x2 l2' :
