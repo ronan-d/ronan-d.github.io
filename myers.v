@@ -72,10 +72,19 @@ assumption.
 exact (is_subseq_rec_ind P (x1 :: l1') l2' H H0 H1 H2).
 Defined.
 
-Lemma is_subseq_rec_lemma1 x l1 l2 :
-  is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
-Proof.
+Definition P1 l1 l2 := forall x, is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 
+Lemma is_subseq_rec_lemma1 l1 l2 :
+  P1 l1 l2.
+Proof.
+  apply is_subseq_rec_ind; unfold P1; intros.
+  - destruct l; reflexivity.
+  - cbn in H.
+    discriminate.
+  - cbn.
+    destruct (T_eq x x).
+    cbn in H0.
+    apply H.
 Qed.
 
 Lemma is_subseq_rec_lemma2 l1 x2 l2' :
