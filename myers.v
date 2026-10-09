@@ -52,6 +52,68 @@ Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
     end
 end.
 
+Lemma is_subseq_rec_app : forall x l1 l2,
+  is_subseq_rec (x :: l1) l2 = true ->
+  exists l3 l4, l2 = l3 ++ x :: l4 /\ is_subseq_rec l1 l4 = true.
+Proof.
+  intros.
+  induction l2 as [|x2 l2'].
+  cbn in H.
+  discriminate.
+  cbn in H.
+  destruct (T_eq x x2).
+  subst x2.
+  exists [].
+  exists l2'.
+  auto.
+  apply IHl2' in H.
+  destruct H as [l3 [l4 H]].
+  exists (x2 :: l3).
+  exists l4.
+  split.
+  cbn.
+  destruct H.
+  subst l2'.
+  reflexivity.
+  destruct H.
+  assumption.
+Qed.
+
+Lemma app_is_subseq_rec : forall x l1 l2,
+  (exists l3 l4, l2 = l3 ++ x :: l4 /\ is_subseq_rec l1 l4 = true) ->
+  is_subseq_rec (x :: l1) l2 = true.
+Proof.
+  intros.
+  induction l2 as [|x2 l2'].
+  destruct H as (l3 & l4 & H0 & H1).
+  destruct l3.
+  cbn in H0.
+  discriminate.
+  cbn in H0.
+  discriminate.
+  destruct H as (l3 & l4 & H0 & H1).
+  cbn.
+  destruct ()
+
+  
+  destruct l3 as [|x3 l3'].
+  cbn in H0.
+  inversion H0.
+  subst x2.
+  subst l4.
+  cbn.
+  destruct (T_eq x x).
+  assumption.
+  exfalso.
+  apply n.
+  reflexivity.
+  cbn in H0.
+  inversion H0.
+  subst x3.
+  subst l2'.
+  clear H0.
+Qed.
+
 Fixpoint is_subseq_rec_ind (P : list T -> list T -> Prop) : forall l1 l2,
   (forall l, P [] l) ->
   (forall x l, P (x :: l) []) ->
@@ -74,17 +136,23 @@ Defined.
 
 Definition P1 l1 l2 := forall x, is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 
-Lemma is_subseq_rec_lemma1 l1 l2 :
-  P1 l1 l2.
+Lemma is_subseq_rec_lemma1 : forall l1 l2 x,
+  is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 Proof.
-  apply is_subseq_rec_ind; unfold P1; intros.
-  - destruct l; reflexivity.
-  - cbn in H.
-    discriminate.
-  - cbn.
-    destruct (T_eq x x).
-    cbn in H0.
-    apply H.
+  intros.
+  assert (exists l3 l4, is_subseq_rec l1 l3 = true /\ is_subseq l4 l3 = is_subseq l1 l2).
+  {
+    induction l2 as [| x2 l2'].
+    - cbn in H.
+      discriminate.
+    - cbn in *.
+      destruct (T_eq x x2).
+      + subst x2.
+        exists l2'.
+        assumption.
+      + apply IHl2' in H.
+        assumption.
+  }
 Qed.
 
 Lemma is_subseq_rec_lemma2 l1 x2 l2' :
