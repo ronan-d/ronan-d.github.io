@@ -25,7 +25,15 @@ Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
     end
 end.
 
-Lemma is_subseq_rec_lemma1 l1 x2 l2' :
+Lemma is_subseq_rec_lemma1 x1 l1' l2 :
+  is_subseq_rec (x1 :: l1') l2 = true -> is_subseq_rec l1' l2 = true.
+Proof.
+  destruct l2; intros.
+  cbn in H.
+  discriminate.
+Qed.
+
+Lemma is_subseq_rec_lemma2 l1 x2 l2' :
   is_subseq_rec l1 l2' = true -> is_subseq_rec l1 (x2 :: l2') = true.
 Proof.
   destruct l1 as [| x1 l1']; intros.
