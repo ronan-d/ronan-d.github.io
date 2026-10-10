@@ -75,12 +75,30 @@ Theorem is_subseq_rec_correct l1 l2 :
   is_subseq l1 l2 <-> is_subseq_rec l1 l2 = true.
 Proof.
   split; intro.
-  induction H.
-  cbn.
-  reflexivity.
-  cbn.
-  destruct (T_eq x x).
-  assumption.
-  intuition.
-
+  - induction H.
+    + reflexivity.
+    + cbn.
+      destruct (T_eq x x); intuition.
+    + destruct l1 as [|x1 l1']. reflexivity.
+      cbn.
+      destruct (T_eq x1 x).
+      * apply is_subseq_rec_lemma1 in IHis_subseq.
+        assumption.
+      * assumption.
+  - generalize dependent l1.
+    induction l2 as [|x2 l2'].
+    + destruct l1.
+      * intro. exact nil_subseq_nil.
+      * intro. cbn in H.
+        discriminate.
+    + destruct l1 as [|x1 l1']; intro.
+      * apply subseq_skip.
+        apply IHl2'.
+        destruct l2'; reflexivity.
+      * cbn in H.
+        destruct (T_eq x1 x2).
+        -- subst x2.
+           apply subseq_take.
+           apply IHl2'.
+           assumption.
 Qed.
