@@ -54,27 +54,34 @@ Proof.
            assumption.
 Qed.
 
-Lemma is_subseq_rec_lemma2 l1 x2 l2' :
-  is_subseq_rec l1 l2' = true -> is_subseq_rec l1 (x2 :: l2') = true.
+Lemma is_subseq_rec_lemma2 : forall l1 l2 x,
+  is_subseq_rec l1 l2 = true -> is_subseq_rec l1 (x :: l2) = true.
 Proof.
-  generalize dependent x.
-  generalize dependent l2.
-  induction l1 as [|x1 l1']; intros.
-  - cbn.
+  induction l1 as [|x1 l1'].
+  - intros.
+    cbn.
     reflexivity.
-  - cbn.
-    destruct (T_eq x1 x).
-    2: assumption.
-    induction l2 as [|x2 l2'].
-    cbn in H.
-    discriminate.
-    cbn in H.
-    destruct (T_eq x1 x2).
-    apply IHl1'.
-    assumption.
-    apply IHl1'.
-    apply IHl2'.
-    assumption.
+  - induction l2 as [|x2 l2'].
+    + intros.
+      cbn in H.
+      discriminate.
+    + intros.
+      replace (is_subseq_rec (x1 :: l1') (x :: x2 :: l2')) with
+        match T_eq x1 x with
+        | left _ => is_subseq_rec l1' (x2 :: l2')
+        | right _ => is_subseq_rec (x1 :: l1') (x2 :: l2')
+        end by reflexivity.
+      destruct (T_eq x1 x).
+      1, 2: cycle 1.
+      * assumption.
+      * subst x1.
+        cbn in H.
+        destruct (T_eq x x2).
+        -- apply IHl1'.
+           assumption.
+        -- apply IHl1'.
+           apply is_subseq_rec_lemma1 in H.
+           exact H.
 Qed.
 
 Theorem is_subseq_rec_correct l1 l2 :
