@@ -41,3 +41,20 @@ Warm up to :code:`is_subseq` by proving the following theorem:
 .. code-block:: isabelle
 
    theorem is_subseq_nil_l: "is_subseq Nil l"
+
+
+Exercise 2
+++++++++++
+
+Another warm up exercise to get familiar with :code:`is_subseq`:
+
+.. code-block:: isabelle
+
+   theorem not_cons_subseq_nil:
+
+
+An effective decision procedure for :code:`is_subseq`
+-----------------------------------------------------
+
+We've given an inductive definition of ":code:`l1` is a subsequence of :code:`l2`" in
+the previous section. It is also possible to give an recursive definition.

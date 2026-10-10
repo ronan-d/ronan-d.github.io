@@ -101,4 +101,17 @@ Proof.
            apply subseq_take.
            apply IHl2'.
            assumption.
+        -- apply subseq_skip.
+           apply IHl2'.
+           assumption.
 Qed.
+
+Inductive presence_tag :=
+| both
+| only_left
+| only_right.
+
+Definition diff := list (presence_tag * T).
+
+Locate filter.
+Check filter.
