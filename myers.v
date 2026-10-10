@@ -59,27 +59,16 @@ Proof.
   - intros.
     cbn.
     reflexivity.
-  - induction l2 as [|x2 l2'].
-    + intros.
-      cbn in H.
-      discriminate.
-    + intros.
-      replace (is_subseq_rec (x1 :: l1') (x :: x2 :: l2')) with
-        match T_eq x1 x with
-        | left _ => is_subseq_rec l1' (x2 :: l2')
-        | right _ => is_subseq_rec (x1 :: l1') (x2 :: l2')
-        end by reflexivity.
-      destruct (T_eq x1 x).
-      1, 2: cycle 1.
-      * assumption.
-      * subst x1.
-        cbn in H.
-        destruct (T_eq x x2).
-        -- apply IHl1'.
-           assumption.
-        -- apply IHl1'.
-           apply is_subseq_rec_lemma1 in H.
-           exact H.
+  - intros.
+    cbn.
+    destruct (T_eq x1 x). 2: assumption.
+    destruct l2 as [|x2 l2']. cbn in H. discriminate.
+    apply IHl1'.
+    cbn in H.
+    destruct (T_eq x1 x2).
+    * assumption.
+    * apply is_subseq_rec_lemma1 in H.
+      exact H.
 Qed.
 
 Theorem is_subseq_rec_correct l1 l2 :
