@@ -23,6 +23,8 @@ theorem is_subseq_nil_l: "is_subseq Nil l"
   apply (auto)
   done
 
+theorem not_cons_subseq_nil: "\<not> is_subseq (x # l) []"
+
 fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec Nil _ = True" |
 "is_subseq_rec (_ # _) Nil = False" |
@@ -35,8 +37,8 @@ theorem cons_not_subseq_nil: "\<not> is_subseq (x # l) Nil"
 thm is_subseq_rec.induct
 
 definition P1 :: "'a \<Rightarrow> 'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
-"P1 x l1 l2 = (is_subseq_rec l1 l2 \<longrightarrow> is_subseq_rec l1 (x # l2))
-               \<and> is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2"
+"P1 x l1 l2 = ((is_subseq_rec l1 l2 \<longrightarrow> is_subseq_rec l1 (x # l2))
+               \<and> (is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2))"
 
 lemma is_subseq_rec_lemma1: "P1 x l1 l2"
   apply (induction rule: is_subseq_rec.induct)
