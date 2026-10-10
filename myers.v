@@ -85,17 +85,18 @@ Lemma app_is_subseq_rec : forall x l1 l2,
 Proof.
   intros.
   induction l2 as [|x2 l2'].
-  destruct H as (l3 & l4 & H0 & H1).
-  destruct l3.
-  cbn in H0.
-  discriminate.
-  cbn in H0.
-  discriminate.
-  destruct H as (l3 & l4 & H0 & H1).
+  - destruct H as (l3 & l4 & H0 & H1).
+    destruct l3.
+    cbn in H0.
+    discriminate.
+    cbn in H0.
+    discriminate.
+  - destruct H as (l3 & l4 & H0 & H1).
   cbn.
-  destruct ()
+  destruct (T_eq x x2).
+  subst x2.
 
-  
+
   destruct l3 as [|x3 l3'].
   cbn in H0.
   inversion H0.
