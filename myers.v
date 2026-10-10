@@ -57,7 +57,7 @@ Proof.
     2: discriminate.
     + cbn.
       rewrite Heq.
-Qed.
+Admitted.
 
 Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
 | [], _ => true
@@ -101,44 +101,27 @@ Lemma app_is_subseq_rec : forall x l1 l2,
   is_subseq_rec (x :: l1) l2 = true.
 Proof.
   intros.
-  induction l2 as [|x2 l2'].
-  - destruct H as (l3 & l4 & H0 & H1).
-    destruct l3.
-    cbn in H0.
-    discriminate.
-    cbn in H0.
-    discriminate.
-  - destruct H as (l3 & l4 & H0 & H1).
+  destruct H as (l3 & l4 & H0 & H1).
+  subst l2.
+  generalize dependent l1.
+  generalize dependent x.
+  generalize dependent l4.
+  induction l3 as [|x3 l3'].
+  - intros.
     cbn.
-    destruct (T_eq x x2).
-    subst x2.
-    induction l3 as [|x3 l3'].
-    cbn in H0.
-    inversion H0.
-    subst l4.
-    assumption.
-    apply IHl3'.
-    cbn in H0.
-    inversion H0.
-    subst x3.
-
-  destruct l3 as [|x3 l3'].
-  cbn in H0.
-  inversion H0.
-  subst x2.
-  subst l4.
-  cbn.
-  destruct (T_eq x x).
-  assumption.
-  exfalso.
-  apply n.
-  reflexivity.
-  cbn in H0.
-  inversion H0.
-  subst x3.
-  subst l2'.
-  clear H0.
-Qed.
+    destruct (T_eq x x). assumption. intuition.
+  - intros.
+    cbn.
+    destruct (T_eq x x3).
+    + subst x3.
+      destruct l1 as [|x1 l1'].
+      * destruct (l3' ++ x :: l4); reflexivity.
+      * apply is_subseq_rec_app in H1.
+        destruct H1 as (l5 & l6 & H2 & H3).
+        subst l4.
+        apply IHl3' with (x := x1) in H3.
+        apply IHl3' with (x := x) in H3.
+Admitted.
 
 Fixpoint is_subseq_rec_ind (P : list T -> list T -> Prop) : forall l1 l2,
   (forall l, P [] l) ->
@@ -159,6 +142,18 @@ apply H2.
 assumption.
 exact (is_subseq_rec_ind P (x1 :: l1') l2' H H0 H1 H2).
 Defined.
+
+Fixpoint is_subseq_rec_ind2 (P : list T -> list T -> Prop) : forall l1 l2,
+  (forall l, P [] l) ->
+  (forall x l, P (x :: l) []) ->
+  (forall x y l1 l2, P l1 l2 -> P (x :: l1) (x :: y :: l2)) ->
+  P l1 l2.
+intros.
+destruct (l1) as [|x1 l1'].
+apply H.
+destruct l2 as [|x2 l2'].
+apply H0.
+
 
 Definition P1 l1 l2 := forall x, is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 
