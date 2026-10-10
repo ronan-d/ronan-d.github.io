@@ -42,6 +42,23 @@ Proof.
   cbn in H.
   Admitted.
 
+Lemma is_subseq_rec2_lemma2 : forall l1 x l2,
+  is_subseq_rec2 l1 l2 = true -> is_subseq_rec2 l1 (x :: l2) = true.
+Proof.
+  induction l1 as [|x1 l1'].
+  - intros.
+    reflexivity.
+  - intros.
+    replace (is_subseq_rec2 (x1 :: l1') l2) with match find_first x1 l2 with
+    | None => false
+    | Some l2' => is_subseq_rec2 l1' l2'
+    end in H.
+    destruct (find_first x1 l2) eqn:Heq.
+    2: discriminate.
+    + cbn.
+      rewrite Heq.
+Qed.
+
 Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
 | [], _ => true
 | x1 :: l1', [] => false
@@ -92,10 +109,18 @@ Proof.
     cbn in H0.
     discriminate.
   - destruct H as (l3 & l4 & H0 & H1).
-  cbn.
-  destruct (T_eq x x2).
-  subst x2.
-
+    cbn.
+    destruct (T_eq x x2).
+    subst x2.
+    induction l3 as [|x3 l3'].
+    cbn in H0.
+    inversion H0.
+    subst l4.
+    assumption.
+    apply IHl3'.
+    cbn in H0.
+    inversion H0.
+    subst x3.
 
   destruct l3 as [|x3 l3'].
   cbn in H0.
