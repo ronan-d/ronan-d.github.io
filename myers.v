@@ -28,30 +28,28 @@ end.
 Lemma is_subseq_rec_lemma1 : forall l1 l2 x,
   is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
 Proof.
-  induction l1 as [|x1 l1'].
+  intros l1 l2.
+  generalize dependent l1.
+  induction l2 as [|x2 l2'].
   - intros.
-    destruct l2; reflexivity.
-  - induction l2 as [|x2 l2'].
-    + intros.
-      cbn in H.
-      discriminate.
-    + intros.
+    cbn in H.
+    discriminate.
+  - intros.
+    assert (is_subseq_rec l1 l2' = true).
+    {
       cbn in H.
       destruct (T_eq x x2).
-      * cbn.
-        destruct (T_eq x1 x2).
-        -- subst x1.
-           subst x2.
-           apply IHl1' in H.
-           assumption.
-        -- assumption.
-      * cbn.
-        destruct (T_eq x1 x2).
-        -- apply IHl1' with (x := x1).
-           apply IHl2' with (x := x).
-           assumption.
-        -- apply IHl2' in H.
-           assumption.
+      - assumption.
+      - apply IHl2' in H.
+        exact H.
+    }
+    destruct l1 as [|x1 l1'].
+    + reflexivity.
+    + cbn.
+      destruct (T_eq x1 x2).
+      * apply IHl2' in H0.
+        exact H0.
+      * assumption.
 Qed.
 
 Lemma is_subseq_rec_lemma2 : forall l1 l2 x,
