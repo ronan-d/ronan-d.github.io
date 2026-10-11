@@ -10,6 +10,14 @@ Inductive is_subseq : list T -> list T -> Prop :=
 | subseq_take x l1 l2 : is_subseq l1 l2 -> is_subseq (x :: l1) (x :: l2)
 | subseq_skip x l1 l2 : is_subseq l1 l2 -> is_subseq l1 (x :: l2).
 
+Theorem nil_subseq_l : forall l, is_subseq [] l.
+Proof.
+  induction l as [|x l' IH].
+  - exact nil_subseq_nil.
+  - apply subseq_skip.
+    exact IH.
+Qed.
+
 Theorem cons_not_subseq_nil x l : ~is_subseq (x :: l) [].
 Proof.
   intro.
@@ -174,10 +182,96 @@ Definition is_lcs s l1 l2 :=
 
 Definition longest (l1 l2 : list T) := if length l1 <=? length l2 then l2 else l1.
 
-Fixpoint lcs_rec (l1 l2 : list T) : list T := match l1 with
+Inductive pop_pair :
+  (list T * list T) -> (list T * list T) -> Prop :=
+| pop_right l1 x2 l2' : pop_pair (pair l1 l2') (pair l1 (x2 :: l2'))
+| pop_left x1 l1' l2 : pop_pair (pair l1' l2) (pair (x1 :: l1') l2)
+| pop_both x1 l1' x2 l2' : pop_pair (pair l1' l2') (pair (x1 :: l1') (x2 :: l2')).
+
+Theorem pop_pair_acc : forall p, Acc pop_pair p.
+Proof.
+  intros [l1 l2].
+  apply Acc_intro.
+  generalize dependent l2.
+  induction l1 as [|x1 l1' IH1].
+  - induction l2 as [|x2 l2' IH2].
+    + intros.
+      inversion H.
+    + intros.
+      inversion H.
+      subst.
+      apply Acc_intro.
+      intros.
+      apply IH2.
+      assumption.
+  - induction l2 as [|x2 l2' IH2].
+    + intros.
+      inversion H.
+      subst.
+      apply Acc_intro.
+      intros.
+      apply IH1 in H0.
+      exact H0.
+    + intros.
+      inversion H; subst.
+      * apply Acc_intro.
+        intros.
+        apply IH2.
+        exact H0.
+      * apply Acc_intro.
+        intros.
+        apply IH1 in H0.
+        exact H0.
+      * apply Acc_intro.
+        intros.
+        apply IH1 in H0.
+        exact H0.
+Qed.
+
+Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_one (pair l1 l2)) : list T := match l1 with
 | [] => []
 | x1 :: l1' => (fix f l2 := match l2 with
   | [] => []
-  | x2 :: l2' => longest (lcs_rec l1' l2) (f l2')
+  | x2 :: l2' => match T_eq x1 x2 with
+    | left _ => x1 :: (lcs_rec l1' l2' (Acc_inv ACC (pop_)))
+    | right _ => longest (lcs_rec l1' l2) (f l2')
+    end
   end) l2
 end.
+
+Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
+Proof.
+  induction l1 as [|x1 l1' IH1].
+  - intros.
+    split; cbn; apply nil_subseq_l.
+  - induction l2 as [|x2 l2' IH2].
+    + cbn.
+      split; apply nil_subseq_l.
+    + cbn.
+      destruct (T_eq x1 x2).
+      * subst x2.
+        split; apply subseq_take; apply IH1.
+      * 
+Qed.
+
+Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
+Proof.
+  induction l1 as [|x1 l1' IH1].
+  - cbn.
+    intros.
+    split.
+    + split.
+      * exact nil_subseq_nil.
+      * apply nil_subseq_l.
+    + intros.
+      cbn.
+      apply le_0_n.
+  - induction l2 as [|x2 l2' IH2].
+    + cbn.
+      split.
+      * split; apply nil_subseq_l.
+      * intros.
+        apply le_0_n.
+    + split.
+
+Qed.
