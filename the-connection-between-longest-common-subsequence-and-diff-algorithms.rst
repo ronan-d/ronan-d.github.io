@@ -7,7 +7,9 @@ If you read `the diff program's Wikipedia page <wiki_>`_, you might be intrigued
 
 .. _wiki: https://en.wikipedia.org/wiki/Diff
 
-In this post, I will illustrate this claim using examples in Isabelle/HOL.
+In this post, I will illustrate this claim using examples in `Isabelle/HOL <isabelle_>`_.
+
+.. _isabelle: https://isabelle.in.tum.de/
 
 Subsequences, formally
 ----------------------
@@ -57,4 +59,8 @@ An effective decision procedure for :code:`is_subseq`
 -----------------------------------------------------
 
 We've given an inductive definition of ":code:`l1` is a subsequence of :code:`l2`" in
-the previous section. It is also possible to give an recursive definition.
+the previous section. It is also possible to give an equivalent recursive definition.
+
+.. toggle::
+
+   The definition goes here

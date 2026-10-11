@@ -18,7 +18,7 @@ import sys
 
 sys.path.append(os.path.abspath("./_ext"))
 
-extensions = ["auto_index"]
+extensions = ["auto_index", "sphinx_togglebutton"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

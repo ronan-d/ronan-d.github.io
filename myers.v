@@ -113,5 +113,61 @@ Inductive presence_tag :=
 
 Definition diff := list (presence_tag * T).
 
-Locate filter.
-Check filter.
+Definition present_in_left (x : presence_tag * T) : bool := match fst x with
+| both | only_left => true
+| only_right => false
+end.
+
+Definition extract_left (d : diff) : list T := map snd (filter present_in_left d).
+
+Definition present_in_right (x : presence_tag * T) : bool := match fst x with
+| both | only_right => true
+| only_left => false
+end.
+
+Definition extract_right (d : diff) : list T := map snd (filter present_in_right d).
+
+Definition present_in_both (x : presence_tag * T) : bool := match fst x with
+| both => true
+| only_left | only_right => false
+end.
+
+Definition extract_common (d : diff) : list T := map snd (filter present_in_both d).
+
+Definition is_common_subseq s l1 l2 := is_subseq s l1 /\ is_subseq s l2.
+
+Theorem extract_common_is_common_subseq : forall d,
+  is_common_subseq (extract_common d) (extract_left d) (extract_right d).
+Proof.
+  induction d as [| x d' IH].
+  - cbn.
+    split; exact nil_subseq_nil.
+  - destruct x as [tag x].
+    split.
+    + destruct IH as [IH _].
+      destruct tag.
+      * cbn.
+        apply subseq_take.
+        exact IH.
+      * cbn.
+        apply subseq_skip.
+        exact IH.
+      * cbn.
+        exact IH.
+    + destruct IH as [_ IH].
+      destruct tag.
+      * cbn.
+        apply subseq_take.
+        exact IH.
+      * exact IH.
+      * cbn.
+        apply subseq_skip.
+        exact IH.
+Qed.
+
+Definition is_pseudo_diff d l1 l2 := extract_left d = l1 /\ extract_right = l2.
+
+Definition is_lcs s l1 l2 :=
+  is_common_subseq s l1 l2 /\
+  forall s0, is_common_subseq s0 l1 l2 -> length s <= length s0.
+
