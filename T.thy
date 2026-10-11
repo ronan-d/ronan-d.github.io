@@ -1,22 +1,11 @@
 theory T imports Main begin
 
-typedecl label
-
-fun my_plus :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
-"my_plus 0 n = n" |
-"my_plus (Suc m) n = Suc (my_plus m n)"
-
-lemma my_plus_n_zero: "my_plus n 0 = n"
-  apply(induction n)
-  apply(auto)
-  done
-
 inductive is_subseq :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 nil_subseq_nil: "is_subseq [] []" |
-subseq_take: "is_subseq l1 l2 \<Longrightarrow> is_subseq (Cons x l1) (Cons x l2)" |
-subseq_skip: "is_subseq l1 l2 \<Longrightarrow> is_subseq l1 (Cons x l2)"
+subseq_take: "is_subseq l1 l2 \<Longrightarrow> is_subseq (x # l1) (x # l2)" |
+subseq_skip: "is_subseq l1 l2 \<Longrightarrow> is_subseq l1 (x # l2)"
 
-theorem is_subseq_nil_l: "is_subseq Nil l"
+theorem is_subseq_nil_l: "is_subseq [] l"
   apply (induction l)
    apply (rule nil_subseq_nil)
   apply (rule subseq_skip)
@@ -24,6 +13,11 @@ theorem is_subseq_nil_l: "is_subseq Nil l"
   done
 
 theorem not_cons_subseq_nil: "\<not> is_subseq (x # l) []"
+proof
+  assume "is_subseq (x # l) []"
+  thus False
+    by cases
+qed
 
 fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec Nil _ = True" |

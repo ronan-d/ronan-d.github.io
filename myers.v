@@ -1,3 +1,4 @@
+From Corelib Require Import Nat.
 From Stdlib Require Import List. Import ListNotations.
 
 Parameter T: Set.
@@ -171,3 +172,15 @@ Definition is_lcs s l1 l2 :=
   is_common_subseq s l1 l2 /\
   forall s0, is_common_subseq s0 l1 l2 -> length s <= length s0.
 
+Definition longest (l1 l2 : list T) := if length l1 <=? length l2 then l2 else l1.
+
+Fixpoint lcs_rec (l1 l2 : list T) : list T := match l1 with
+| [] => []
+| x1 :: l1' => match l2 with
+  | [] => []
+  | x2 :: l2' => match T_eq x1 x2 with
+    | left _ => x1 :: (lcs_rec l1' l2')
+    | right _ => longest (lcs_rec l1' l2) (lcs_rec l1 l2')
+    end
+  end
+end.
