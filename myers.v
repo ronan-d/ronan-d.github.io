@@ -176,11 +176,8 @@ Definition longest (l1 l2 : list T) := if length l1 <=? length l2 then l2 else l
 
 Fixpoint lcs_rec (l1 l2 : list T) : list T := match l1 with
 | [] => []
-| x1 :: l1' => match l2 with
+| x1 :: l1' => (fix f l2 := match l2 with
   | [] => []
-  | x2 :: l2' => match T_eq x1 x2 with
-    | left _ => x1 :: (lcs_rec l1' l2')
-    | right _ => longest (lcs_rec l1' l2) (lcs_rec l1 l2')
-    end
-  end
+  | x2 :: l2' => longest (lcs_rec l1' l2) (f l2')
+  end) l2
 end.
