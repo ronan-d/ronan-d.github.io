@@ -22,32 +22,22 @@ qed
 fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec Nil _ = True" |
 "is_subseq_rec (_ # _) Nil = False" |
-"is_subseq_rec (x1 # l1) (x2 # l2) = (if x1 = x2 then is_subseq_rec l1 l2 else is_subseq_rec l1 (x2 # l2))"
+"is_subseq_rec (x1 # l1) (x2 # l2) =
+   (if x1 = x2 then is_subseq_rec l1 l2 else is_subseq_rec l1 (x2 # l2))"
 
-theorem cons_not_subseq_nil: "\<not> is_subseq (x # l) Nil"
-  apply (auto elim: is_subseq.cases)
-  done
+lemma is_subseq_rec_lemma1: "is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2"
+proof (induction l2)
+  case []
+  show ?case by simp
+next
+  fix l2' assume "?P l2'"
+  
+qed
+
 
 thm is_subseq_rec.induct
 
-definition P1 :: "'a \<Rightarrow> 'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
-"P1 x l1 l2 = ((is_subseq_rec l1 l2 \<longrightarrow> is_subseq_rec l1 (x # l2))
-               \<and> (is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2))"
 
-lemma is_subseq_rec_lemma1: "P1 x l1 l2"
-  apply (induction rule: is_subseq_rec.induct)
-    apply (simp_all add: P1_def)
-  
-
-theorem is_subseq_rec_correct: "is_subseq l1 l2 = is_subseq_rec l1 l2"
-  apply (induction l1)
-   apply (simp)
-   apply (rule is_subseq_nil_l)
-  apply (induction l2)
-   apply (simp)
-   apply (rule cons_not_subseq_nil)
-  apply (simp)
-  apply (rule conjI)
 
 datatype presence_tag =
 OnlyLeft |
