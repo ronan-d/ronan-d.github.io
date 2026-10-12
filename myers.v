@@ -182,71 +182,28 @@ Definition is_lcs s l1 l2 :=
 
 Definition longest (l1 l2 : list T) := if length l1 <=? length l2 then l2 else l1.
 
-Inductive pop_pair :
-  (list T * list T) -> (list T * list T) -> Prop :=
-| pop_right l1 x2 l2' : pop_pair (pair l1 l2') (pair l1 (x2 :: l2'))
-| pop_left x1 l1' l2 : pop_pair (pair l1' l2) (pair (x1 :: l1') l2)
-| pop_both x1 l1' x2 l2' : pop_pair (pair l1' l2') (pair (x1 :: l1') (x2 :: l2')).
-
-Theorem pop_pair_acc : forall p, Acc pop_pair p.
-Proof.
-  intros [l1 l2].
-  apply Acc_intro.
-  generalize dependent l2.
-  induction l1 as [|x1 l1' IH1].
-  - induction l2 as [|x2 l2' IH2].
-    + intros.
-      inversion H.
-    + intros.
-      inversion H.
-      subst.
-      apply Acc_intro.
-      intros.
-      apply IH2.
-      assumption.
-  - induction l2 as [|x2 l2' IH2].
-    + intros.
-      inversion H.
-      subst.
-      apply Acc_intro.
-      intros.
-      apply IH1 in H0.
-      exact H0.
-    + intros.
-      inversion H; subst.
-      * apply Acc_intro.
-        intros.
-        apply IH2.
-        exact H0.
-      * apply Acc_intro.
-        intros.
-        apply IH1 in H0.
-        exact H0.
-      * apply Acc_intro.
-        intros.
-        apply IH1 in H0.
-        exact H0.
-Qed.
-
-Fixpoint lcs_wf (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
-match l1, l2 return Acc pop_pair (pair l1 l2) -> list T with
-| [], _ | _, [] => fun _ => []
-| x1 :: l1', x2 :: l2' => fun ACC' =>
-    if T_eq x1 x2 then
-      lcs_wf l1' l2' (Acc_inv ACC' (pop_both x1 l1' x2 l2'))
-    else
-      longest
-        (lcs_wf l1' (x2 :: l2') (Acc_inv ACC' (pop_left x1 l1' (x2 :: l2'))))
-        (lcs_wf (x1 :: l1') l2' (Acc_inv ACC' (pop_right (x1 :: l1') x2 l2')))
-end ACC.
-
-Definition lcs_rec (l1 l2 : list T) := lcs_wf l1 l2 (pop_pair_acc (pair l1 l2)).
+Fixpoint lcs_rec (l1 l2 : list T) := match l1 with
+| [] => []
+| x1 :: l1' => (fix f l2 := match l2 with
+  | [] => []
+  | x2 :: l2' =>
+      if T_eq x1 x2 then
+        x1 :: (lcs_rec l1' l2')
+      else
+        longest (lcs_rec l1' l2) (f l2')
+  end) l2
+end.
 
 Lemma lcs_rec_nil_l : forall l, lcs_rec [] l = [].
 Proof.
   intros.
-  unfold lcs_rec,lcs_wf.
-  
+  reflexivity.  
+Qed.
+
+Lemma lcs_rec_l_nil : forall l, lcs_rec l [] = [].
+Proof.
+  intros.
+  destruct l; reflexivity.
 Qed.
 
 Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
