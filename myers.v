@@ -228,15 +228,14 @@ Proof.
         exact H0.
 Qed.
 
-Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_one (pair l1 l2)) : list T := match l1 with
-| [] => []
-| x1 :: l1' => (fix f l2 := match l2 with
-  | [] => []
-  | x2 :: l2' => match T_eq x1 x2 with
-    | left _ => x1 :: (lcs_rec l1' l2' (Acc_inv ACC (pop_)))
-    | right _ => longest (lcs_rec l1' l2) (f l2')
-    end
-  end) l2
+Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
+match l1, l2 with
+| [], _ | _, [] => []
+| x1 :: l1', x2 :: l2' =>
+    if T_eq x1 x2 then
+      lcs_rec l1' l2' (Acc_inv ACC (pop_both x1 l1' x2 l2'))
+    else
+      []
 end.
 
 Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
