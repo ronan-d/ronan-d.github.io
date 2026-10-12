@@ -229,7 +229,7 @@ Proof.
 Qed.
 
 Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
-match l1 as l1_, l2 as l2_ return Acc pop_pair (pair l1_ l2_) -> list T with
+match l1, l2 return Acc pop_pair (pair l1 l2) -> list T with
 | [], _ | _, [] => fun _ => []
 | x1 :: l1', x2 :: l2' => fun ACC' =>
     if T_eq x1 x2 then
