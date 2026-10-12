@@ -228,21 +228,32 @@ Proof.
         exact H0.
 Qed.
 
-Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
+Fixpoint lcs_wf (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
 match l1, l2 return Acc pop_pair (pair l1 l2) -> list T with
 | [], _ | _, [] => fun _ => []
 | x1 :: l1', x2 :: l2' => fun ACC' =>
     if T_eq x1 x2 then
-      lcs_rec l1' l2' (Acc_inv ACC' (pop_both x1 l1' x2 l2'))
+      lcs_wf l1' l2' (Acc_inv ACC' (pop_both x1 l1' x2 l2'))
     else
-      []
+      longest
+        (lcs_wf l1' (x2 :: l2') (Acc_inv ACC' (pop_left x1 l1' (x2 :: l2'))))
+        (lcs_wf (x1 :: l1') l2' (Acc_inv ACC' (pop_right (x1 :: l1') x2 l2')))
 end ACC.
+
+Definition lcs_rec (l1 l2 : list T) := lcs_wf l1 l2 (pop_pair_acc (pair l1 l2)).
+
+Lemma lcs_rec_nil_l : forall l, lcs_rec [] l = [].
+Proof.
+  intros.
+  unfold lcs_rec,lcs_wf.
+  
+Qed.
 
 Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
 Proof.
   induction l1 as [|x1 l1' IH1].
   - intros.
-    split; cbn; apply nil_subseq_l.
+    split.
   - induction l2 as [|x2 l2' IH2].
     + cbn.
       split; apply nil_subseq_l.
