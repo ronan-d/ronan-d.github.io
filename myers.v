@@ -206,19 +206,38 @@ Proof.
   destruct l; reflexivity.
 Qed.
 
+Lemma lcs_rec_cons_cons : forall x1 l1' x2 l2',  lcs_rec (x1 :: l1') (x2 :: l2') =
+  if T_eq x1 x2 then
+    x1 :: (lcs_rec l1' l2')
+  else
+    longest (lcs_rec l1' (x2 :: l2')) (lcs_rec (x1 :: l1') l2').
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+Opaque lcs_rec.
+
 Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
 Proof.
   induction l1 as [|x1 l1' IH1].
   - intros.
     split.
+    + rewrite lcs_rec_nil_l.
+      exact nil_subseq_nil.
+    + rewrite lcs_rec_nil_l.
+      apply nil_subseq_l.
   - induction l2 as [|x2 l2' IH2].
-    + cbn.
-      split; apply nil_subseq_l.
-    + cbn.
-      destruct (T_eq x1 x2).
-      * subst x2.
-        split; apply subseq_take; apply IH1.
-      * 
+    + split; rewrite lcs_rec_l_nil; apply nil_subseq_l.
+    + split.
+      * rewrite lcs_rec_cons_cons.
+        destruct (T_eq x1 x2).
+        -- apply subseq_take.
+           apply IH1.
+        -- unfold longest.
+           destruct (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2')).
+           ++ apply IH2.
+           ++ .
 Qed.
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
