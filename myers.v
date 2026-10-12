@@ -229,14 +229,14 @@ Proof.
 Qed.
 
 Fixpoint lcs_rec (l1 l2 : list T) (ACC : Acc pop_pair (pair l1 l2)) : list T :=
-match l1, l2 with
-| [], _ | _, [] => []
-| x1 :: l1', x2 :: l2' =>
+match l1 as l1_, l2 as l2_ return Acc pop_pair (pair l1_ l2_) -> list T with
+| [], _ | _, [] => fun _ => []
+| x1 :: l1', x2 :: l2' => fun ACC' =>
     if T_eq x1 x2 then
-      lcs_rec l1' l2' (Acc_inv ACC (pop_both x1 l1' x2 l2'))
+      lcs_rec l1' l2' (Acc_inv ACC' (pop_both x1 l1' x2 l2'))
     else
       []
-end.
+end ACC.
 
 Theorem lcs_rec_is_common_subseq : forall l1 l2, is_common_subseq (lcs_rec l1 l2) l1 l2.
 Proof.
