@@ -42,7 +42,7 @@ Proof.
   - apply subseq_skip.
     apply IH2 in H2.
     exact H2.
-Qed.
+Qed.  
 
 Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
 | [], _ => true
@@ -275,22 +275,86 @@ Theorem lcs_rec_is_longest : forall l1 l2, forall s0,
   is_common_subseq s0 l1 l2 -> length s0 <= length (lcs_rec l1 l2).
 Proof.
   induction l1 as [|x1 l1' IH1].
-  - intros.
+  {
+    intros.
     rewrite lcs_rec_nil_l.
     destruct H as [H _].
     inversion H.
     apply le_n.
-  - induction l2 as [|x2 l2' IH2].
-    + intros.
-      rewrite lcs_rec_l_nil.
-      destruct H as [_ H].
-      inversion H.
-      apply le_n.
-    + intros.
-      rewrite lcs_rec_cons_cons.
-      destruct (T_eq x1 x2).
-      * cbn.
-        subst x2.
-
-
+  }
+  induction l2 as [|x2 l2' IH2].
+  {
+    intros.
+    rewrite lcs_rec_l_nil.
+    destruct H as [_ H].
+    inversion H.
+    apply le_n.
+  }
+  intros.
+  rewrite lcs_rec_cons_cons.
+  destruct (T_eq x1 x2).
+  - cbn.
+    subst x2.
+    destruct H as [Hl Hr].
+    inversion Hl; clear Hl; subst; inversion Hr; clear Hr; subst.
+    + cbn.
+      apply le_n_S.
+      apply IH1.
+      split; assumption.
+    + cbn.
+      apply le_n_S.
+      apply tail_of_subseq_is_subseq in H2.
+      apply IH1.
+      split; assumption.
+    + cbn.
+      apply le_n_S.
+      apply IH1.
+      apply tail_of_subseq_is_subseq in H1.
+      split; assumption.
+    + apply le_S.
+      apply IH1.
+      split; assumption.
+  - unfold longest.
+    destruct (PeanoNat.Nat.leb_spec0 
+      (length (lcs_rec l1' (x2 :: l2')))
+      (length (lcs_rec (x1 :: l1') l2'))).
+    + destruct H as [Hl Hr].
+      inversion Hl; subst; clear Hl; inversion Hr; clear Hr; subst.
+      * exfalso. intuition.
+      * apply IH2.
+        split.
+        -- apply subseq_take.
+           assumption.
+        -- assumption.
+      * eapply PeanoNat.Nat.le_trans.
+        2: exact l.
+        apply IH1.
+        split. assumption.
+        apply subseq_take.
+        assumption.
+      * apply IH2.
+        split.
+        -- apply subseq_skip.
+           assumption.
+        -- assumption.
+    + destruct H as [Hl Hr].
+      apply PeanoNat.Nat.lt_nge in n0.
+      inversion Hl; subst; clear Hl; inversion Hr; clear Hr; subst.
+      * exfalso. intuition.
+      * apply PeanoNat.Nat.lt_le_incl in n0.
+        eapply PeanoNat.Nat.le_trans.
+        2: exact n0.
+        apply IH2.
+        split.
+        -- apply subseq_take.
+           assumption.
+        -- assumption.
+      * apply IH1.
+        split. assumption.
+        apply subseq_take.
+        assumption.
+      * apply IH1.
+        split. assumption.
+        apply subseq_skip.
+        assumption.
 Qed.
