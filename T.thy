@@ -20,12 +20,12 @@ proof
 qed
 
 theorem tail_of_subseq_is_subseq: "is_subseq (x # l1) l2 \<Longrightarrow> is_subseq l1 l2"
-proof (induction l2)
+proof (induction l2 arbitrary: x l1)
   case Nil
   then show ?case by cases
 next
-  case (Cons a l2)
-  then show ?case sorry
+  case (Cons x2 l2')
+  then show ?case by (cases rule: is_subseq.cases)
 qed
 
 
