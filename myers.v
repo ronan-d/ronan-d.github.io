@@ -237,7 +237,18 @@ Proof.
         -- unfold longest.
            destruct (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2')).
            ++ apply IH2.
-           ++ .
+           ++ apply subseq_skip.
+              apply IH1.
+      * rewrite lcs_rec_cons_cons.
+        destruct (T_eq x1 x2).
+        -- subst x2.
+           apply subseq_take.
+           apply IH1.
+        -- unfold longest.
+           destruct (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2')).
+           ++ apply subseq_skip.
+              apply IH2.
+           ++ apply IH1.
 Qed.
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
