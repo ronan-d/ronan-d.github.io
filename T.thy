@@ -20,16 +20,14 @@ proof
 qed
 
 theorem tail_of_subseq_is_subseq: "is_subseq (x # l1) l2 \<Longrightarrow> is_subseq l1 l2"
-proof (induction rule: is_subseq.induct)
-  case nil_subseq_nil
-  then show ?case
+proof (induction l2)
+  case Nil
+  then show ?case by cases
 next
-  case (subseq_take l1 l2 x)
-  then show ?case sorry
-next
-  case (subseq_skip l1 l2 x)
+  case (Cons a l2)
   then show ?case sorry
 qed
+
 
 fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec Nil _ = True" |
