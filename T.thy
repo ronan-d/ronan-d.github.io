@@ -19,6 +19,18 @@ proof
     by cases
 qed
 
+theorem tail_of_subseq_is_subseq: "is_subseq (x # l1) l2 \<Longrightarrow> is_subseq l1 l2"
+proof (induction rule: is_subseq.induct)
+  case nil_subseq_nil
+  then show ?case
+next
+  case (subseq_take l1 l2 x)
+  then show ?case sorry
+next
+  case (subseq_skip l1 l2 x)
+  then show ?case sorry
+qed
+
 fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 "is_subseq_rec Nil _ = True" |
 "is_subseq_rec (_ # _) Nil = False" |
@@ -27,11 +39,11 @@ fun is_subseq_rec :: "'a list \<Rightarrow> 'a list \<Rightarrow> bool" where
 
 lemma is_subseq_rec_lemma1: "is_subseq_rec (x # l1) l2 \<longrightarrow> is_subseq_rec l1 l2"
 proof (induction l2)
-  case []
+  case Nil
   show ?case by simp
 next
-  fix l2' assume "?P l2'"
-  
+  case (Cons x2 l2')
+  show ?case by simp
 qed
 
 

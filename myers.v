@@ -24,6 +24,26 @@ Proof.
   inversion H.
 Qed.
 
+Theorem tail_of_subseq_is_subseq : forall x l1 l2,
+  is_subseq (x :: l1) l2 -> is_subseq l1 l2.
+Proof.
+  intros.
+  generalize dependent l1.
+  generalize dependent x.
+  induction l2 as [|x2 l2' IH2].
+  {
+    intros.
+    inversion H.
+  }
+  intros.
+  inversion H; clear H; subst.
+  - apply subseq_skip.
+    assumption.
+  - apply subseq_skip.
+    apply IH2 in H2.
+    exact H2.
+Qed.
+
 Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
 | [], _ => true
 | x1 :: l1', [] => false
@@ -178,7 +198,7 @@ Definition is_pseudo_diff d l1 l2 := extract_left d = l1 /\ extract_right = l2.
 
 Definition is_lcs s l1 l2 :=
   is_common_subseq s l1 l2 /\
-  forall s0, is_common_subseq s0 l1 l2 -> length s <= length s0.
+  forall s0, is_common_subseq s0 l1 l2 -> length s0 <= length s.
 
 Definition longest (l1 l2 : list T) := if length l1 <=? length l2 then l2 else l1.
 
@@ -251,24 +271,26 @@ Proof.
            ++ apply IH1.
 Qed.
 
-Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
+Theorem lcs_rec_is_longest : forall l1 l2, forall s0,
+  is_common_subseq s0 l1 l2 -> length s0 <= length (lcs_rec l1 l2).
 Proof.
   induction l1 as [|x1 l1' IH1].
-  - cbn.
-    intros.
-    split.
-    + split.
-      * exact nil_subseq_nil.
-      * apply nil_subseq_l.
-    + intros.
-      cbn.
-      apply le_0_n.
+  - intros.
+    rewrite lcs_rec_nil_l.
+    destruct H as [H _].
+    inversion H.
+    apply le_n.
   - induction l2 as [|x2 l2' IH2].
-    + cbn.
-      split.
-      * split; apply nil_subseq_l.
-      * intros.
-        apply le_0_n.
-    + split.
+    + intros.
+      rewrite lcs_rec_l_nil.
+      destruct H as [_ H].
+      inversion H.
+      apply le_n.
+    + intros.
+      rewrite lcs_rec_cons_cons.
+      destruct (T_eq x1 x2).
+      * cbn.
+        subst x2.
+
 
 Qed.
