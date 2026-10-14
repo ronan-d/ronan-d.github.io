@@ -364,10 +364,13 @@ match l1 with
 | [] => pair [] 1
 | x1 :: l1' => (fix f l2 := match l2 with
   | [] => pair [] 1
-  | x2 :: l2' =>
-    let (c1, n1) := lcs_rec_with_counter l1' l2 in
-    let (c2, n2) := f l2' in
-    pair (longest c1 c2) (n1 + n2 + 1)
+  | x2 :: l2' => if (T_eq x1 x2) then
+      let (c, n) := lcs_rec_with_counter l1' l2' in
+      pair (x1 :: c) (n + 1)
+    else
+      let (c1, n1) := lcs_rec_with_counter l1' l2 in
+      let (c2, n2) := f l2' in
+      pair (longest c1 c2) (n1 + n2 + 1)
   end) l2
 end.
 
