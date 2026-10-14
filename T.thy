@@ -19,13 +19,16 @@ proof
     by cases
 qed
 
+inductive_cases subseq_cons_cons_E: "is_subseq (x1 # l1') (x2 # l2')"
+
 theorem tail_of_subseq_is_subseq: "is_subseq (x # l1) l2 \<Longrightarrow> is_subseq l1 l2"
 proof (induction l2 arbitrary: x l1)
   case Nil
-  then show ?case by cases
+  then show ?case by (cases rule: subseq_cons_cons_
 next
   case (Cons x2 l2')
-  then show ?case by (cases rule: is_subseq.cases)
+  
+  then show ?case
 qed
 
 
