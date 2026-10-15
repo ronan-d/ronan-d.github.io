@@ -419,3 +419,6 @@ Proof.
 Qed.
 
 Opaque diff_rec.
+
+Theorem diff_rec_is_pseudo_diff : forall l1 l2,
+  diff_rec l1 l2
