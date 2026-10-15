@@ -194,7 +194,7 @@ Proof.
         exact IH.
 Qed.
 
-Definition is_pseudo_diff d l1 l2 := extract_left d = l1 /\ extract_right = l2.
+Definition is_pseudo_diff d l1 l2 : Prop := extract_left d = l1 /\ extract_right d = l2.
 
 Definition is_lcs s l1 l2 :=
   is_common_subseq s l1 l2 /\
@@ -421,4 +421,55 @@ Qed.
 Opaque diff_rec.
 
 Theorem diff_rec_is_pseudo_diff : forall l1 l2,
-  diff_rec l1 l2
+  is_pseudo_diff (diff_rec l1 l2) l1 l2.
+Proof.
+  induction l1 as [|x1 l1' IH1].
+  {
+    intros.
+    rewrite diff_rec_nil_l.
+    induction l2 as [|x2 l2' IH2].
+    - cbn.
+      split; reflexivity.
+    - cbn.
+      split.
+      + cbn.
+        destruct IH2 as [IH2 _].
+        unfold extract_left in IH2.
+        assumption.
+      + cbn.
+        destruct IH2 as [_ IH2].
+        unfold extract_right in IH2.
+        rewrite IH2.
+        reflexivity.
+  }
+  induction l2 as [|x2 l2' IH2].
+  {
+    rewrite diff_rec_l_nil.
+    cbn.
+    split.
+    - destruct (IH1 []) as [IH _].
+      cbn.
+      unfold extract_left in IH.
+      rewrite diff_rec_l_nil in IH.
+      rewrite IH.
+      reflexivity.
+    - destruct (IH1 []) as [_ IH].
+      cbn.
+      rewrite diff_rec_l_nil in IH.
+      exact IH.
+  }
+  rewrite diff_rec_cons_cons.
+  destruct (T_eq x1 x2).
+  - split.
+    + cbn.
+      destruct (IH1 l2') as [IH _].
+      unfold extract_left in IH.
+      rewrite IH.
+      reflexivity.
+    + cbn.
+      destruct (IH1 l2') as [_ IH].
+      unfold extract_right in IH.
+      rewrite IH.
+      subst x2.
+      reflexivity.
+Qed.
