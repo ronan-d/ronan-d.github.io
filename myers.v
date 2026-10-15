@@ -374,3 +374,48 @@ match l1 with
   end) l2
 end.
 
+Fixpoint diff_rec (l1 l2 : list T) : diff :=
+match l1 with
+| [] => List.map (fun x => pair only_right x) l2
+| x1 :: l1' => (fix f l2 := match l2 with
+  | [] => List.map (fun x => pair only_left x) l1
+  | x2 :: l2' => if (T_eq x1 x2) then
+      pair both x1 :: diff_rec l1' l2'
+    else
+      let d1 := diff_rec l1' l2 in
+      let d2 := f l2' in
+      if length (extract_common d1) <=? length (extract_common d2) then
+        pair only_right x2 :: d2
+      else
+        pair only_left x1 :: d1
+  end) l2
+end.
+
+Lemma diff_rec_nil_l : forall l,
+  diff_rec [] l = List.map (fun x => pair only_right x) l.
+Proof.
+  reflexivity.
+Qed.
+
+Lemma diff_rec_l_nil : forall l,
+  diff_rec l [] = List.map (fun x => pair only_left x) l.
+Proof.
+  destruct l; reflexivity.
+Qed.
+
+Lemma diff_rec_cons_cons : forall x1 l1' x2 l2',
+  diff_rec (x1 :: l1') (x2 :: l2') =
+    if (T_eq x1 x2) then
+        pair both x1 :: diff_rec l1' l2'
+      else
+        let d1 := diff_rec l1' (x2 :: l2') in
+        let d2 := diff_rec (x1 :: l1') l2' in
+        if length (extract_common d1) <=? length (extract_common d2) then
+          pair only_right x2 :: d2
+        else
+          pair only_left x1 :: d1.
+Proof.
+  reflexivity.
+Qed.
+
+Opaque diff_rec.
