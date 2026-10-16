@@ -485,7 +485,14 @@ Proof.
         unfold extract_right in IH2.
         rewrite IH2.
         reflexivity.
-    + 
-        
-
+    + split.
+      * cbn.
+        destruct (IH1 (x2 :: l2')) as [IH _].
+        unfold extract_left in IH.
+        rewrite IH.
+        reflexivity.
+      * cbn.
+        destruct (IH1 (x2 :: l2')) as [_ IH].
+        unfold extract_right in IH.
+        exact IH.
 Qed.
