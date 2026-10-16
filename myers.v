@@ -472,4 +472,20 @@ Proof.
       rewrite IH.
       subst x2.
       reflexivity.
+  - cbn.
+    destruct (length (extract_common (diff_rec l1' (x2 :: l2'))) <=?
+      length (extract_common (diff_rec (x1 :: l1') l2'))).
+    + split.
+      * destruct IH2 as [IH2 _].
+        unfold extract_left in IH2.
+        cbn.
+        exact IH2.
+      * cbn.
+        destruct IH2 as [_ IH2].
+        unfold extract_right in IH2.
+        rewrite IH2.
+        reflexivity.
+    + 
+        
+
 Qed.
