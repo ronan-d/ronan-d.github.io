@@ -496,3 +496,14 @@ Proof.
         unfold extract_right in IH.
         exact IH.
 Qed.
+
+Record Leadoid := mkLeadoid {
+  s : list T;
+  x1 : T;
+  l1' : list T;
+  x2 : T;
+  l2' : list T;
+}.
+
+Definition Lead := {ld : Leadoid | ld.(x1) <> ld.(x2)}.
+
