@@ -27,10 +27,20 @@ Parameter T_eq : forall x y : T, {x = y} + {x <> y}.
     Last, if neither [l1] or [l2] is empty, we can compare their first elements.
     If they're equal, we recursively check whether the tail of [l1] is a
     subsequence of the tail of [l2]. If the heads are not equal, we recursively
-    check whether the tail of [l1] is a subsequence of the entire [l2]. *)
+    check whether [l1] is a subsequence of the tail of [l2]. *)
 
 Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
 | [], _ => true
 | _, [] => false
-| x1 :: l1'
+| x1 :: l1', x2 :: l2' => if (T_eq x1 x2) then
+    is_subseq_rec l1' l2'
+  else
+    is_subseq_rec l1 l2'
 end.
+
+(** The rest of this part is going to be about showing that [is_subseq_rec]
+    indeed corresponds to [is_subseq]. *)
+
+(** **** Exercise: 3 stars (tail_of_subseq_is_subseq_rec)
+
+    Start by proving the equivalent of part 1's last theorem: *)
