@@ -504,20 +504,25 @@ Record Path := mkPath {
   l2 : list T;
 }.
 
-Definition cost path :=
-  (fix f d := match d with
-  | (tag, _) :: d' => match tag with
-    | only_left | only_right => 1
-    | both => 0
-    end + f d'
-  | [] => 0
-  end) path.(d).
+Definition cost (path : Path) : nat :=
+  let costs := map
+    (fun x => match fst x with | only_left | only_right => 1 | both => 0 end)
+    path.(d)
+  in
+    list_sum costs.
 
-Definition diagonal path : Z :=
+Definition diagonal (path : Path) : Z :=
+  let offsets := map
+    (fun x => match fst x with | only_left => 1%Z | only_right => (-1)%Z | both => 0%Z end)
+    path.(d)
+  in
+    fold_left Z.add offsets 0%Z.
+
+(* Definition diagonal path : Z :=
   (fix f d := match d with
   | (tag, _) :: d' => todo
   | [] => 0
-  end) path.(d)
+  end) path.(d) *)
 
 Record Leadoid := mkLeadoid {
   s : list T;
