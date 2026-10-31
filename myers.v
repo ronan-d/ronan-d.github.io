@@ -518,32 +518,21 @@ Definition diagonal (path : Path) : Z :=
   in
     fold_left Z.add offsets 0%Z.
 
+Definition distance (path : Path) : nat :=
+  length path.(l1) + length path.(l2).
 
-(* Definition diagonal path : Z :=
-  (fix f d := match d with
-  | (tag, _) :: d' => todo
-  | [] => 0
-  end) path.(d) *)
+Definition is_path (path : Path) (la lb : list T) : Prop :=
+    la = extract_left path.(d) ++ path.(l1) /\
+    lb = extract_right path.(d) ++ path.(l2).
 
-Record Leadoid := mkLeadoid {
-  s : list T;
-  x1 : T;
-  l1' : list T;
-  x2 : T;
-  l2' : list T;
-}.
-
-Definition Lead := {ld : Leadoid | ld.(x1) <> ld.(x2)}.
-
-(* Lower is better. *)
-Definition score ld := length ld.(l1') + length ld.(l2').
-
-Definition parallel ld := Z.sub
-  (Z.of_nat (length ld.(l1')))
-  (Z.of_nat (length ld.(l2'))).
-
-(* Definition is_lead ld l1 l2 : Prop :=
-  exists p1, l1 = p1 ++ ld.(x1) :: ld.(l1') /\
-  exists p2, l2 = p2 ++ ld.(x2) :: ld.(l2') /\
-  is_common_subseq ld.(s) p1 p2 /\
-  forall ld0, *)
+Definition is_best_at_cost_on_diag
+  (path : Path)
+  (la lb : list T)
+: Prop
+:=
+  is_path path la lb /\
+  forall (p0 : Path),
+    (is_path p0 la lb /\
+     cost p0 = cost path /\
+     diagonal p0 = diagonal path) ->
+    distance path <= distance p0.
