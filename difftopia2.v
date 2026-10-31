@@ -44,3 +44,52 @@ end.
 (** **** Exercise: 3 stars (tail_of_subseq_is_subseq_rec)
 
     Start by proving the equivalent of part 1's last theorem: *)
+
+Theorem tail_of_subseq_is_subseq_rec : forall x l1 l2,
+  is_subseq_rec (x :: l1) l2 = true -> is_subseq_rec l1 l2 = true.
+Proof. (** HIDE *)
+  intros.
+  generalize dependent l1.
+  generalize dependent x.
+  induction l2 as [| x2 l2' IH ]; intros x l1 H.
+  {
+    cbn in H.
+    discriminate.
+  }
+  assert (H0 : is_subseq_rec l1 l2' = true).
+  {
+    cbn in H.
+    destruct (T_eq x x2).
+    - assumption.
+    - apply IH in H.
+      exact H.
+  }
+  clear H.
+  destruct l1 as [| x1 l1' ].
+  {
+    reflexivity.
+  }
+  cbn.
+  destruct (T_eq x1 x2).
+  - apply IH in H0.
+    assumption.
+  - assumption.
+Qed.
+
+(** **** Exercise: 2 starts (subseq_skip_rec) 
+
+    Prove the equivalent of the [subseq_skip] constructor of [is_subseq]: *)
+
+Theorem subseq_skip_rec : forall l1 x l2,
+  is_subseq_rec l1 l2 = true -> is_subseq_rec l1 (x :: l2) = true.
+Proof. (** HIDE *)
+  induction l1 as [| x1 l1' IH ]; intros x l2 H.
+  {
+    reflexivity.
+  }
+  cbn.
+  destruct (T_eq x1 x).
+  - apply tail_of_subseq_is_subseq_rec in H.
+    assumption.
+  - assumption.
+Qed.

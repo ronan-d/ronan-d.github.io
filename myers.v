@@ -136,12 +136,14 @@ Proof.
            assumption.
 Qed.
 
+Parameter (l1 l2 : list T).
+
 Inductive presence_tag :=
 | both
 | only_left
 | only_right.
 
-Definition diff := list (presence_tag * T).
+Definition diff := list presence_tag.
 
 Definition present_in_left (x : presence_tag * T) : bool := match fst x with
 | both | only_left => true
@@ -536,3 +538,8 @@ Definition is_best_at_cost_on_diag
      cost p0 = cost path /\
      diagonal p0 = diagonal path) ->
     distance path <= distance p0.
+
+Lemma myers_lemma_2 : forall (c : nat) (path : Path) (la lb : list T),
+  (is_best_at_cost_on_diag path la lb /\ cost path = S c) ->
+  ((exists p, cost p = c /\ ) \/
+   todo).
