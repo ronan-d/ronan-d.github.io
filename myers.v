@@ -498,6 +498,21 @@ Proof.
         exact IH.
 Qed.
 
+Record Path := mkPath {
+  d : diff;
+  l1 : list T;
+  l2 : list T;
+}.
+
+Definition cost path :=
+  (fix f d := match d with
+  | (tag, _) :: d' => match tag with
+    | only_left | only_right => 1
+    | both => 0
+    end + f d'
+  | [] => 0
+  end) path.(d).
+
 Record Leadoid := mkLeadoid {
   s : list T;
   x1 : T;
@@ -511,12 +526,12 @@ Definition Lead := {ld : Leadoid | ld.(x1) <> ld.(x2)}.
 (* Lower is better. *)
 Definition score ld := length ld.(l1') + length ld.(l2').
 
-Definition diagonal ld := Z.sub
+Definition parallel ld := Z.sub
   (Z.of_nat (length ld.(l1')))
   (Z.of_nat (length ld.(l2'))).
 
-Definition is_lead ld l1 l2 : Prop :=
+(* Definition is_lead ld l1 l2 : Prop :=
   exists p1, l1 = p1 ++ ld.(x1) :: ld.(l1') /\
   exists p2, l2 = p2 ++ ld.(x2) :: ld.(l2') /\
   is_common_subseq ld.(s) p1 p2 /\
-  forall ld0, .
+  forall ld0, *)
