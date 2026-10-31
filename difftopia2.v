@@ -16,3 +16,15 @@ Inductive is_subseq : list T -> list T -> Prop :=
     equality. Let's assume so: *)
 
 Parameter T_eq : forall x y : T, {x = y} + {x <> y}.
+
+(** How can we effectively check that a list [l1] is a subsequence of a list
+    [l2]?
+    
+    First, if [l1] is empty, it is certainly a subseqence of [l2].
+    
+    Otherwise and if [l2] is empty, [l1] is certainly not a subsequence of [l2].
+    
+    Last, if neither [l1] or [l2] is empty, we can compare their first elements.
+    If they're equal, we recursively check whether the tail of [l1] is a
+    subsequence of the tail of [l2]. If the heads are not equal, we recursively
+    check whether the tail of [l1] is a subsequence of the entire [l2]. *)
