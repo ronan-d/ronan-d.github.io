@@ -28,3 +28,9 @@ Parameter T_eq : forall x y : T, {x = y} + {x <> y}.
     If they're equal, we recursively check whether the tail of [l1] is a
     subsequence of the tail of [l2]. If the heads are not equal, we recursively
     check whether the tail of [l1] is a subsequence of the entire [l2]. *)
+
+Fixpoint is_subseq_rec (l1 l2 : list T) : bool := match l1, l2 with
+| [], _ => true
+| _, [] => false
+| x1 :: l1'
+end.
