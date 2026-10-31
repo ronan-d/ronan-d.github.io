@@ -518,6 +518,7 @@ Definition diagonal (path : Path) : Z :=
   in
     fold_left Z.add offsets 0%Z.
 
+
 (* Definition diagonal path : Z :=
   (fix f d := match d with
   | (tag, _) :: d' => todo
