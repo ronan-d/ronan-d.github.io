@@ -513,6 +513,12 @@ Definition cost path :=
   | [] => 0
   end) path.(d).
 
+Definition diagonal path : Z :=
+  (fix f d := match d with
+  | (tag, _) :: d' => todo
+  | [] => 0
+  end) path.(d)
+
 Record Leadoid := mkLeadoid {
   s : list T;
   x1 : T;
