@@ -143,19 +143,21 @@ Inductive presence_tag :=
 | only_left
 | only_right.
 
-Definition diff := list presence_tag.
-
-Definition present_in_left (x : presence_tag * T) : bool := match fst x with
+Definition present_in_left tag : bool := match tag with
 | both | only_left => true
 | only_right => false
 end.
 
-Definition extract_left (d : diff) : list T := map snd (filter present_in_left d).
-
-Definition present_in_right (x : presence_tag * T) : bool := match fst x with
+Definition present_in_right tag : bool := match tag with
 | both | only_right => true
 | only_left => false
 end.
+
+Definition diff := { x : list presence_tag |
+  length (filter present_in_left x) = length l1 /\ todo
+}.
+
+Definition extract_left (d : diff) : list T := map snd (filter present_in_left d).
 
 Definition extract_right (d : diff) : list T := map snd (filter present_in_right d).
 
