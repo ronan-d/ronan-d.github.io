@@ -181,3 +181,12 @@ Proof. (** HIDE *)
   - apply subseq_skip.
     assumption.
 Qed.
+
+Theorem is_subseq_rec_correct : forall l1 l2,
+  is_subseq_rec l1 l2 = true <-> is_subseq l1 l2.
+Proof.
+  intros.
+  split.
+  - apply is_subseq_rec_implies_is_subseq.
+  - apply is_subseq_implies_is_subseq_rec.
+Qed.
