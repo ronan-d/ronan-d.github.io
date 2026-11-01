@@ -523,11 +523,19 @@ Definition is_best_at_cost_on_diag
 : Prop
 :=
   is_path d l1 l2 /\
-  forall (p0 : Path),
-    (is_path p0 la lb /\
-     cost p0 = cost path /\
-     diagonal p0 = diagonal path) ->
-    length (extract_left p0.(d)) <= length (extract_left path.(d)).
+  forall (d0 : diff),
+    (is_path d0 l1 l2 /\
+     cost d0 = cost d /\
+     diagonal d0 = diagonal d) ->
+    length (extract_left d0) <= length (extract_left d).
 
-Lemma myers_lemma2 : forall (c : nat) (path : Path),
-  is_best_at_cost_on_diag path 
+Lemma myers_lemma2 : forall (d : diff) l1 l2,
+  is_best_at_cost_on_diag d l1 l2 -> 0 < cost d ->
+  ((exists d0 x a,
+      d = d0 ++ [(only_left, x)] ++ a /\
+      Forall (fun p => fst p = both) a /\
+      is_best_at_cost_on_diag d0 l1 l2) \/
+   (exists d0 x a,
+      d = d0 ++ [(only_right, x)] ++ a /\
+      Forall (fun p => fst p = both) a /\
+      is_best_at_cost_on_diag d0 l1 l2)).
