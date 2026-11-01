@@ -498,41 +498,36 @@ Proof.
         exact IH.
 Qed.
 
-Record Path := mkPath {
-  d : diff;
-  l1 : list T;
-  l2 : list T;
-}.
-
-Definition cost (path : Path) : nat :=
+Definition cost (d : diff) : nat :=
   let costs := map
     (fun x => match fst x with | only_left | only_right => 1 | both => 0 end)
-    path.(d)
+    d
   in
     list_sum costs.
 
-Definition diagonal (path : Path) : Z :=
+Definition diagonal (d : diff) : Z :=
   let offsets := map
     (fun x => match fst x with | only_left => 1%Z | only_right => (-1)%Z | both => 0%Z end)
-    path.(d)
+    d
   in
     fold_left Z.add offsets 0%Z.
 
-Definition distance (path : Path) : nat :=
-  length path.(l1) + length path.(l2).
-
-Definition is_path (path : Path) (la lb : list T) : Prop :=
-    la = extract_left path.(d) ++ path.(l1) /\
-    lb = extract_right path.(d) ++ path.(l2).
+Definition is_path (d : diff) (l1 l2 : list T) : Prop :=
+  exists s1 s2,
+    l1 = extract_left d ++ s1 /\
+    l2 = extract_right d ++ s2.
 
 Definition is_best_at_cost_on_diag
-  (path : Path)
-  (la lb : list T)
+  (d : diff)
+  (l1 l2 : list T)
 : Prop
 :=
-  is_path path la lb /\
+  is_path d l1 l2 /\
   forall (p0 : Path),
     (is_path p0 la lb /\
      cost p0 = cost path /\
      diagonal p0 = diagonal path) ->
-    distance path <= distance p0.
+    length (extract_left p0.(d)) <= length (extract_left path.(d)).
+
+Lemma myers_lemma2 : forall (c : nat) (path : Path),
+  is_best_at_cost_on_diag path 
