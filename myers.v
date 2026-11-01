@@ -527,6 +527,35 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
      diagonal d0 = diagonal d) ->
     length (extract_left d0) <= length (extract_left d).
 
+
+Lemma myers_lemma1 : forall d, exists k,
+  (0 <= k /\ k <= Z.of_nat (cost d))%Z /\
+  diagonal d = (Z.of_nat (cost d) + 2 * k)%Z.
+Proof. (** HIDE *)
+  induction d as [| [tag x] d' IH ].
+  {
+    exists 0%Z.
+    split.
+    - split.
+      + apply Z.le_refl.
+      + cbn.
+        apply Z.le_refl.
+    - reflexivity.
+  }
+  destruct IH as [k [[IH1 IH2] IH3]].
+  destruct tag.
+  - exists k.
+    split.
+    split.
+    + assumption.
+    + assumption.
+    + assumption.
+  - exists (k + 1)%Z.
+    split. split.
+    + Print Z.le.
+
+Qed.
+
 Lemma myers_lemma2 : forall (d : diff),
   is_best_at_cost_on_diag d -> 0 < cost d ->
   exists d0 x a,
@@ -535,5 +564,12 @@ Lemma myers_lemma2 : forall (d : diff),
     d = d0 ++ x :: a /\
     (fst x <> both).
 Proof.
+  intros d H1 H2.
+  destruct d.
+  {
+    cbn in H2.
+    inversion H2.
+  }
+  destruct p as [tag x].
 
 Qed.
