@@ -512,30 +512,28 @@ Definition diagonal (d : diff) : Z :=
   in
     fold_left Z.add offsets 0%Z.
 
-Definition is_path (d : diff) (l1 l2 : list T) : Prop :=
+Parameter (l1 l2 : list T).
+
+Definition is_path (d : diff) : Prop :=
   exists s1 s2,
     l1 = extract_left d ++ s1 /\
     l2 = extract_right d ++ s2.
 
-Definition is_best_at_cost_on_diag
-  (d : diff)
-  (l1 l2 : list T)
-: Prop
-:=
-  is_path d l1 l2 /\
+Definition is_best_at_cost_on_diag (d : diff) : Prop :=
+  is_path d /\
   forall (d0 : diff),
-    (is_path d0 l1 l2 /\
+    (is_path d0 /\
      cost d0 = cost d /\
      diagonal d0 = diagonal d) ->
     length (extract_left d0) <= length (extract_left d).
 
-Lemma myers_lemma2 : forall (d : diff) l1 l2,
-  is_best_at_cost_on_diag d l1 l2 -> 0 < cost d ->
+Lemma myers_lemma2 : forall (d : diff),
+  is_best_at_cost_on_diag d -> 0 < cost d ->
   ((exists d0 x a,
       d = d0 ++ [(only_left, x)] ++ a /\
       Forall (fun p => fst p = both) a /\
-      is_best_at_cost_on_diag d0 l1 l2) \/
+      is_best_at_cost_on_diag d0) \/
    (exists d0 x a,
       d = d0 ++ [(only_right, x)] ++ a /\
       Forall (fun p => fst p = both) a /\
-      is_best_at_cost_on_diag d0 l1 l2)).
+      is_best_at_cost_on_diag d0)).
