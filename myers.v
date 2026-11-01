@@ -529,11 +529,11 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
 
 Lemma myers_lemma2 : forall (d : diff),
   is_best_at_cost_on_diag d -> 0 < cost d ->
-  ((exists d0 x a,
-      d = d0 ++ [(only_left, x)] ++ a /\
-      Forall (fun p => fst p = both) a /\
-      is_best_at_cost_on_diag d0) \/
-   (exists d0 x a,
-      d = d0 ++ [(only_right, x)] ++ a /\
-      Forall (fun p => fst p = both) a /\
-      is_best_at_cost_on_diag d0)).
+  exists d0 x a,
+    is_best_at_cost_on_diag d0 /\
+    Forall (fun p => fst p = both) a /\
+    d = d0 ++ x :: a /\
+    (fst x <> both).
+Proof.
+
+Qed.

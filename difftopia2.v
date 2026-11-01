@@ -1,5 +1,7 @@
 From Stdlib Require Import List. Import ListNotations.
 
+Require Import Difftopia1.
+
 (** First, let's copy the bits from part 1 that we're going to need: *)
 
 Parameter T: Set.
