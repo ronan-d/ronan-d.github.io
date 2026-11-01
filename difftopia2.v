@@ -76,7 +76,7 @@ Proof. (** HIDE *)
   - assumption.
 Qed.
 
-(** **** Exercise: 2 starts (subseq_skip_rec) 
+(** **** Exercise: 2 stars (subseq_skip_rec) 
 
     Prove the equivalent of the [subseq_skip] constructor of [is_subseq]: *)
 
@@ -92,4 +92,15 @@ Proof. (** HIDE *)
   - apply tail_of_subseq_is_subseq_rec in H.
     assumption.
   - assumption.
+Qed.
+
+(** **** Exercise: 3 stars (is_subseq_implies_is_subseq_rec) 
+
+         Prove the inductive-to-recursive direction of the equivalence: *)
+
+Theorem is_subseq_implies_is_subseq_rec : forall l1 l2,
+    is_subseq l1 l2 -> is_subseq_rec l1 l2 = true.
+Proof. (** HIDE *)
+  intros.
+  
 Qed.
