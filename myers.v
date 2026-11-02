@@ -1,6 +1,7 @@
 From Corelib Require Import Nat.
 From Stdlib Require Import List. Import ListNotations.
 From Stdlib Require Import ZArith.
+From Stdlib Require Import Lia.
 
 Parameter T: Set.
 
@@ -498,19 +499,18 @@ Proof.
         exact IH.
 Qed.
 
-Definition cost (d : diff) : nat :=
-  let costs := map
-    (fun x => match fst x with | only_left | only_right => 1 | both => 0 end)
-    d
-  in
-    list_sum costs.
+Fixpoint cost (d : diff) : nat := match d with
+| [] => O
+| (only_left, _) :: d' | (only_right, _) :: d' => S (cost d')
+| (both, _) :: d' => cost d'
+end.
 
-Definition diagonal (d : diff) : Z :=
-  let offsets := map
-    (fun x => match fst x with | only_left => 1%Z | only_right => (-1)%Z | both => 0%Z end)
-    d
-  in
-    fold_left Z.add offsets 0%Z.
+Fixpoint diagonal (d : diff) : Z := match d with
+| [] => Z0
+| (only_left, _) :: d' => (diagonal d' + 1)%Z
+| (only_right, _) :: d' => (diagonal d' - 1)%Z
+| (both, _) :: d' => diagonal d'
+end.
 
 Parameter (l1 l2 : list T).
 
@@ -527,33 +527,39 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
      diagonal d0 = diagonal d) ->
     length (extract_left d0) <= length (extract_left d).
 
-
 Lemma myers_lemma1 : forall d, exists k,
-  (0 <= k /\ k <= Z.of_nat (cost d))%Z /\
-  diagonal d = (Z.of_nat (cost d) + 2 * k)%Z.
+  0 <= k /\ k <= cost d /\
+  diagonal d = Z.sub (Z.of_nat (2 * k)) (Z.of_nat (cost d)).
 Proof. (** HIDE *)
   induction d as [| [tag x] d' IH ].
   {
-    exists 0%Z.
+    exists 0.
     split.
-    - split.
-      + apply Z.le_refl.
-      + cbn.
-        apply Z.le_refl.
-    - reflexivity.
+    {
+      apply le_n.
+    }
+    split.
+    {
+      cbn.
+      apply le_n.
+    }
+    cbn.
+    reflexivity.
   }
-  destruct IH as [k [[IH1 IH2] IH3]].
+  destruct IH as [k [IH1 [IH2 IH3]]].
   destruct tag.
   - exists k.
-    split.
-    split.
-    + assumption.
-    + assumption.
-    + assumption.
+    split. assumption.
+    split. assumption.
+    assumption.
   - exists (k + 1)%Z.
     split. split.
-    + Print Z.le.
-
+    {
+      apply Z.le_trans with (m := k).
+      * assumption.
+      * apply Z.le_succ_diag_r.
+    }
+    + cbn.
 Qed.
 
 Lemma myers_lemma2 : forall (d : diff),
