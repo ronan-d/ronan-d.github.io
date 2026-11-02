@@ -552,18 +552,18 @@ Proof. (** HIDE *)
     split. assumption.
     split. assumption.
     assumption.
-  - exists (k + 1)%Z.
-    split. split.
-    {
-      apply Z.le_trans with (m := k).
-      * assumption.
-      * apply Z.le_succ_diag_r.
-    }
-    + cbn.
+  - exists (k + 1).
+    split. lia.
+    split. cbn. lia.
+    cbn. lia.
+  - exists k.
+    split. lia.
+    split. cbn. lia.
+    cbn. lia.
 Qed.
 
-Lemma myers_lemma2 : forall (d : diff),
-  is_best_at_cost_on_diag d -> 0 < cost d ->
+Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
+  is_best_at_cost_on_diag d1 -> 0 < cost d ->
   exists d0 x a,
     is_best_at_cost_on_diag d0 /\
     Forall (fun p => fst p = both) a /\
