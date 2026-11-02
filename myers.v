@@ -563,6 +563,8 @@ Proof. (** HIDE *)
 Qed.
 
 Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
+  cost d1 = cost d2 ->
+  diagonal d2 = (diagonal d1 + 2)%Z ->
   is_best_at_cost_on_diag d1 -> 0 < cost d ->
   exists d0 x a,
     is_best_at_cost_on_diag d0 /\
