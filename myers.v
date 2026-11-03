@@ -562,25 +562,34 @@ Proof. (** HIDE *)
     cbn. lia.
 Qed.
 
-Fixpoint follow_diagonal (d : diff) : diff :=
-  match skipn (length (extract_left d)) l1, skipn (length (extract_right d)) l2 with
-  | x1 :: l1', x2 :: l2' =>
-      if (T_eq x1 x2) then
-        follow_diagonal (d ++ [(both, x1)])
-      else
-        d
-  | _, _ => d
-  end.
+Definition follow_diagonal (d : diff) : diff :=
+  (fix f l1 l2 acc := match l1, l2 with
+   | x1 :: l1', x2 :: l2' =>
+       if (T_eq x1 x2) then
+         f l1' l2' (acc ++ [(both, x1)])
+       else
+         acc
+   | _, _ => acc
+   end)
+    (skipn (length (extract_left d)) l1)
+    (skipn (length (extract_right d)) l2)
+    d.
 
 Definition take_left_and_advance (d : diff) : option diff :=
   match skipn (length (extract_left d)) l1 with
   | [] => None
-  | _ :: l1' => 
+  | x1 :: l1' => Some (follow_diagonal (d ++ [(only_left, x1)]))
   end.
 
-Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
+Definition take_right_and_advance (d : diff) : option diff :=
+  match skipn (length (extract_right d)) l1 with
+  | [] => None
+  | x1 :: l1' => Some (follow_diagonal (d ++ [(only_right, x1)]))
+  end.
+
+(* Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
   cost d1 = cost d2 ->
   diagonal d2 = (diagonal d1 + 2)%Z ->
   is_best_at_cost_on_diag d1 ->
   is_best_at_cost_on_diag d2 ->
-  is_best_at_cost_on_diag (if )
+  is_best_at_cost_on_diag (if ) *)
