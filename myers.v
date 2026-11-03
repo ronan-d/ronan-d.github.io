@@ -562,22 +562,25 @@ Proof. (** HIDE *)
     cbn. lia.
 Qed.
 
+Fixpoint follow_diagonal (d : diff) : diff :=
+  match skipn (length (extract_left d)) l1, skipn (length (extract_right d)) l2 with
+  | x1 :: l1', x2 :: l2' =>
+      if (T_eq x1 x2) then
+        follow_diagonal (d ++ [(both, x1)])
+      else
+        d
+  | _, _ => d
+  end.
+
+Definition take_left_and_advance (d : diff) : option diff :=
+  match skipn (length (extract_left d)) l1 with
+  | [] => None
+  | _ :: l1' => 
+  end.
+
 Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
   cost d1 = cost d2 ->
   diagonal d2 = (diagonal d1 + 2)%Z ->
-  is_best_at_cost_on_diag d1 -> 0 < cost d ->
-  exists d0 x a,
-    is_best_at_cost_on_diag d0 /\
-    Forall (fun p => fst p = both) a /\
-    d = d0 ++ x :: a /\
-    (fst x <> both).
-Proof.
-  intros d H1 H2.
-  destruct d.
-  {
-    cbn in H2.
-    inversion H2.
-  }
-  destruct p as [tag x].
-
-Qed.
+  is_best_at_cost_on_diag d1 ->
+  is_best_at_cost_on_diag d2 ->
+  is_best_at_cost_on_diag (if )
