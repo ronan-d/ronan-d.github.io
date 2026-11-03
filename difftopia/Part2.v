@@ -1,42 +1,6 @@
 From Stdlib Require Import List. Import ListNotations.
 
-Require Import Difftopia1.
-
-(** First, let's copy the bits from part 1 that we're going to need: *)
-
-Parameter T: Set.
-
-Inductive is_subseq : list T -> list T -> Prop :=
-| nil_subseq_nil : is_subseq [] []
-| subseq_take x l1 l2 : is_subseq l1 l2 -> is_subseq (x :: l1) (x :: l2)
-| subseq_skip x l1 l2 : is_subseq l1 l2 -> is_subseq l1 (x :: l2).
-
-Theorem nil_is_subseq_l : forall l, is_subseq [] l.
-Proof. (** HIDE *)
-  induction l as [| x l' IH ].
-  - exact nil_subseq_nil.
-  - apply subseq_skip.
-    exact IH.
-Qed.
-
-Theorem tail_of_subseq_is_subseq : forall x l1 l2,
-  is_subseq (x :: l1) l2 -> is_subseq l1 l2.
-Proof. (** HIDE *)
-  intros.
-  generalize dependent l1.
-  generalize dependent x.
-  induction l2 as [| x2 l2' IH ].
-  {
-    intros.
-    inversion H.
-  }
-  intros.
-  apply subseq_skip.
-  inversion H; clear H; subst.
-  - assumption.
-  - apply (IH x l1).
-    assumption.
-Qed.
+From Difftopia Require Import Part1.
 
 (** Good. Welcome to part 2 of Difftopia. In part 1, we gave an inductive
     definition of what it means for a sequence to be a subsequence of another.
