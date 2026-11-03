@@ -12,3 +12,6 @@ Definition is_common_subseq s l1 l2 := is_subseq s l1 /\ is_subseq s l2.
 Definition is_lcs s l1 l2 :=
   is_common_subseq s l1 l2 /\
   (forall s0, is_common_subseq s0 l1 l2 -> length s0 <= length s).
+
+(** When equality over [T] is decidable, there exists an effective procedure to
+    construct a longest common subsequence of any pair of lists [(l1, l2)]. *)
