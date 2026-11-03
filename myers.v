@@ -587,9 +587,24 @@ Definition take_right_and_advance (d : diff) : option diff :=
   | x1 :: l1' => Some (follow_diagonal (d ++ [(only_right, x1)]))
   end.
 
-(* Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
+Definition does_not_reach_further (d1 d2 : diff) : bool :=
+ length (extract_left d1) <=? length (extract_left d2).
+
+Definition merge (d1 d2 : diff) : option diff :=
+  match take_left_and_advance d1, take_right_and_advance d2 with
+  | Some c1, Some c2 => Some (
+    
+  )
+  | _ => None
+  end.
+
+Lemma modified_myers_lemma2 : forall (d1 d2 : diff),
   cost d1 = cost d2 ->
   diagonal d2 = (diagonal d1 + 2)%Z ->
   is_best_at_cost_on_diag d1 ->
   is_best_at_cost_on_diag d2 ->
-  is_best_at_cost_on_diag (if ) *)
+  is_best_at_cost_on_diag (
+    if does_not_reach_further d1 d2 then
+      take_right_and_advance d2
+    else
+      take_left_and_advance d1).
