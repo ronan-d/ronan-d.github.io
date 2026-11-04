@@ -1,3 +1,4 @@
+From Corelib Require Import Nat.
 From Stdlib Require Import List. Import ListNotations.
 From Equations Require Import Equations.
 
@@ -22,4 +23,15 @@ Definition is_lcs s l1 l2 :=
 Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
 
 Equations lcs (l1 l2 : list T) : list T :=
-lcs [] _ := [].
+lcs [] _ := [];
+lcs _ [] := [];
+lcs (x1 :: l1') (x2 :: l2') :=
+  if (T_eq x1 x2) then
+    lcs l1' l2'
+  else
+    let c1 := lcs l1' (x2 :: l2') in
+    let c2 := lcs (x1 :: l1') l2' in
+    if length c1 <= length c2 then
+      c2
+    else
+      c1.
