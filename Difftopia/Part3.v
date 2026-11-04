@@ -41,5 +41,23 @@ Qed.
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
 Proof.
-  
+  intros.
+  funelim (lcs_rec l1 l2).
+  {
+    split.
+    - split; apply nil_is_subseq_l.
+    - intros.
+      cbn.
+      destruct H as [H _].
+      inversion H; subst.
+      reflexivity.
+  }
+  {
+    split.
+    - split; apply nil_is_subseq_l.
+    - intros.
+      destruct H as [_ H].
+      inversion H; subst.
+      apply le_n.
+  }
 Qed.
