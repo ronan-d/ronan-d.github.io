@@ -1,3 +1,4 @@
+From Stdlib Require Import List. Import ListNotations.
 From Equations Require Import Equations.
 
 From Difftopia Require Import Part1.
@@ -20,4 +21,5 @@ Definition is_lcs s l1 l2 :=
 
 Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
 
-Equations
+Equations lcs (l1 l2 : list T) : list T :=
+lcs [] _ := [].
