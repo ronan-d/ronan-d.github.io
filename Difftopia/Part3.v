@@ -1,3 +1,5 @@
+From Equations Require Import Equations.
+
 From Difftopia Require Import Part1.
 
 (** We say that [s] is a common subsequence of [l1] and [l2] if [s] is both a
@@ -14,4 +16,8 @@ Definition is_lcs s l1 l2 :=
   (forall s0, is_common_subseq s0 l1 l2 -> length s0 <= length s).
 
 (** When equality over [T] is decidable, there exists an effective procedure to
-    construct a longest common subsequence of any pair of lists [(l1, l2)]. *)
+    construct a longest common subsequence of any pair of lists [(l1, l2)]: *)
+
+Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
+
+Equations
