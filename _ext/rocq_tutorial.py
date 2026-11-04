@@ -2,6 +2,36 @@ import io
 from pathlib import Path
 import tarfile
 
+def hide_proof(text, sink):
+    start_marker = "Proof. (** HIDE *)\n"
+    end_marker = "Qed.\n"
+
+    replacement = "Proof.\nAdmitted.\n"
+
+    while True:
+        i = clear_text.find(start_marker)
+
+        if i == -1:
+            break
+
+        sink.write(clear_text[:i])
+        sink.write(replacement)
+
+        clear_text = clear_text[i + len(start_marker) :]
+
+        i = clear_text.find(end_marker)
+
+        assert i != -1
+
+        clear_text = clear_text[i + len(end_marker) :]
+
+def process_dir(dir):
+
+def loop_over_dirs(app):
+    srcdir = Path(app.srcdir)
+    
+    for dir in app.config.rocq_tutorial_dirs:
+        process_dir(srcdir / dir)
 
 def hide_proof(text, sink):
     start_marker = "Proof. (** HIDE *)\n"

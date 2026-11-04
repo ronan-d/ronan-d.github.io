@@ -1,5 +1,5 @@
 From Corelib Require Import Nat.
-From Stdlib Require Import List. Import ListNotations.
+From Stdlib Require Import List Lia. Import ListNotations.
 From Equations Require Import Equations.
 
 From Difftopia Require Import Part1.
@@ -22,16 +22,24 @@ Definition is_lcs s l1 l2 :=
 
 Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
 
-Equations lcs (l1 l2 : list T) : list T :=
-lcs [] _ := [];
-lcs _ [] := [];
-lcs (x1 :: l1') (x2 :: l2') :=
+Equations? lcs_rec (l1 l2 : list T) : list T by wf (length l1 + length l2) lt :=
+lcs_rec [] _ := [];
+lcs_rec _ [] := [];
+lcs_rec (x1 :: l1') (x2 :: l2') :=
   if (T_eq x1 x2) then
-    lcs l1' l2'
+    lcs_rec l1' l2'
   else
-    let c1 := lcs l1' (x2 :: l2') in
-    let c2 := lcs (x1 :: l1') l2' in
-    if length c1 <= length c2 then
+    let c1 := lcs_rec l1' (x2 :: l2') in
+    let c2 := lcs_rec (x1 :: l1') l2' in
+    if length c1 <=? length c2 then
       c2
     else
       c1.
+Proof.
+  all: lia.
+Qed.
+
+Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
+Proof.
+  
+Qed.
