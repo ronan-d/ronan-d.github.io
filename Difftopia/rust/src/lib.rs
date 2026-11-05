@@ -38,14 +38,22 @@ fn follow_trace<T: Eq + Clone>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<
             Some(TraceStep::GoRight) => {
                 if let Some((x1, l01)) = l1.split_first() {
                     l1 = l01;
+                    diff.push((PresenceTag::OnlyLeft, x1.clone()));
                 } else {
                     return None;
                 }
             }
-            Some(TraceStep::GoUp) => (),
-            None => (),
+            Some(TraceStep::GoUp) => {
+                if let Some((x2, l02)) = l2.split_first() {
+                    l2 = l02;
+                    diff.push((PresenceTag::OnlyRight, x2.clone()));
+                } else {
+                    return None;
+                }
+            }
+            None => break,
         }
-
-        ()
     }
+
+    Some(diff)
 }

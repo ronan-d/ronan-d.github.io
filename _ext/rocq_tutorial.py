@@ -25,13 +25,14 @@ def hide_proof(text, sink):
 
         clear_text = clear_text[i + len(end_marker) :]
 
-def process_dir(dir):
+def process_dir(srcdir, dir):
+    tarpath = srcdir / dir.with_suffix("tgz")
 
 def loop_over_dirs(app):
     srcdir = Path(app.srcdir)
     
     for dir in app.config.rocq_tutorial_dirs:
-        process_dir(srcdir / dir)
+        process_dir(srcdir, srcdir / dir)
 
 def hide_proof(text, sink):
     start_marker = "Proof. (** HIDE *)\n"
