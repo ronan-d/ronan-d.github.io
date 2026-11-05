@@ -15,7 +15,7 @@ type Trace = Vec<TraceStep>;
 
 type Diff<T> = Vec<(PresenceTag, T)>;
 
-fn follow_trace<T: Eq>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<T>> {
+fn follow_trace<T: Eq + Clone>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<T>> {
     let mut diff = Vec::new();
 
     let mut l1 = l1;
@@ -28,7 +28,7 @@ fn follow_trace<T: Eq>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<T>> {
             if x1 == x2 {
                 l1 = l01;
                 l2 = l02;
-                diff.push(x1.)
+                diff.push((PresenceTag::Both, x1.clone()))
             } else {
                 break;
             }
@@ -44,13 +44,6 @@ fn follow_trace<T: Eq>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<T>> {
             }
             Some(TraceStep::GoUp) => (),
             None => (),
-        }
-
-        for step in trace {
-            match step {
-                TraceStep::GoRight => if let Some(x1, l01) = l1.split_first() {},
-                TraceStep::GoUp => todo!(),
-            }
         }
 
         ()
