@@ -39,10 +39,6 @@ Proof.
   all: lia.
 Qed.
 
-Lemma some_lemma : forall l x l1 l2,
-  is_common_subseq l (x :: l1) (x :: l2) ->
-  (() \/ todo)
-
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
 Proof.
   intros.
@@ -74,6 +70,23 @@ Proof.
     + apply subseq_take.
       assumption.
     + intros.
+      assert (D: (exists s0', s0 = x1 :: s0')
+                  \/ is_common_subseq s0 l1' l2').
+      {
+        destruct H as [H01 H02].
+        inversion H01; inversion H02; subst; clear H01; clear H02.
+        - left.
+          exists l1.
+          reflexivity.
+        - left.
+          exists l1.
+          reflexivity.
+        - left.
+          exists l0.
+          reflexivity.
+        - right.
+          split; assumption.
+      }
       destruct H as [H01 H02].
       inversion H01; inversion H02; subst.
       * specialize (Hl l1).
