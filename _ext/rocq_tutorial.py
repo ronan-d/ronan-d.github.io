@@ -33,6 +33,9 @@ def process_dir(srcdir, dir):
 
     # TODO Check and insert the _RocqProject file and the various Makefile-related files.
 
+    rocq_project_path = dir / "_RocqProject"
+    expected_contents = "-Q . " + dir.name + "\n"
+
     # TODO Import the proof-erased Rocq files
 
 def loop_over_dirs(app):
