@@ -3,6 +3,7 @@ From Stdlib Require Import List Lia. Import ListNotations.
 From Equations Require Import Equations.
 
 From Difftopia Require Import Part1.
+From Difftopia Require Import Part2.
 
 (** We say that [s] is a common subsequence of [l1] and [l2] if [s] is both a
     subsequence of [l1] and a subsequence of [l1]: *)
@@ -37,6 +38,16 @@ lcs_rec (x1 :: l1') (x2 :: l2') :=
       c1.
 Proof.
   all: lia.
+Qed.
+
+Lemma subseq_equal_heads : forall x l1 l2,
+  is_subseq (x :: l1) (x :: l2) -> is_subseq l1 l2.
+Proof.
+  intros.
+  inversion H; subst; clear H.
+  - assumption.
+  - apply tail_of_subseq_is_subseq with (x := x).
+    assumption.
 Qed.
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
@@ -81,10 +92,26 @@ Proof.
       all: apply tail_of_subseq_is_subseq with (x := x1); assumption.
   - specialize (H0 n).
     specialize (H1 n).
-    destruct
+    destruct H0 as [[H01 H02] H0l].
+    destruct H1 as [[H11 H12] H1l].
+    repeat split.
+    all: destruct
       (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2'))
       eqn:Heq.
-    apply PeanoNat.Nat.leb_le in Heq.
+    all: try apply PeanoNat.Nat.leb_le in Heq.
+    all: try apply PeanoNat.Nat.leb_gt in Heq.
+    1-4: try assumption.
+    1-2: apply subseq_skip; assumption.
+    all: intros s0 [Hs1 Hs2]; inversion Hs1; subst; clear Hs1.
+    1: eapply PeanoNat.Nat.le_trans.
+    2: exact Heq.
+    1,3: apply H0l.
+    all: intros s0 [Hs1 Hs2]; inversion Hs1; inversion Hs2; subst.
+    1,5: inversion H5; subst.
+    apply H1l.
+
+
+    all: repeat split.
     split. split.
     {
       exact (proj1 (proj1 H1)).
@@ -119,7 +146,6 @@ Proof.
           assumption.
         + assumption.
     }
-    apply PeanoNat.Nat.leb_gt in Heq.
     split. split.
     {
       apply subseq_skip.
