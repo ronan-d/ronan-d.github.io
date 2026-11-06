@@ -27,7 +27,7 @@ lcs_rec [] _ := [];
 lcs_rec _ [] := [];
 lcs_rec (x1 :: l1') (x2 :: l2') :=
   if (T_eq x1 x2) then
-    lcs_rec l1' l2'
+    x1 :: lcs_rec l1' l2'
   else
     let c1 := lcs_rec l1' (x2 :: l2') in
     let c2 := lcs_rec (x1 :: l1') l2' in
@@ -60,4 +60,108 @@ Proof.
       inversion H; subst.
       apply le_n.
   }
+  destruct (T_eq x1 x2).
+  - specialize (H e).
+    subst x2.
+    destruct H as [[Hl1 Hl2] Hl].
+    split. split.
+    + apply subseq_take.
+      assumption.
+    + apply subseq_take.
+      assumption.
+    + intros.
+      destruct H as [H01 H02].
+      inversion H01; inversion H02; subst.
+      * specialize (Hl l1).
+        cbn.
+        apply le_n_S.
+        apply Hl.
+        split. assumption.
+        inversion H6; subst.
+        assumption.
+      * cbn.
+        apply le_n_S.
+        apply Hl.
+        split. assumption.
+        apply tail_of_subseq_is_subseq with (x := x1).
+        assumption.
+      * cbn.
+        apply le_n_S.
+        apply Hl.
+        split. apply tail_of_subseq_is_subseq with (x := x1).
+        assumption.
+        assumption.
+      * cbn.
+        apply le_S.
+        apply Hl.
+        split; assumption.
+  - specialize (H0 n).
+    specialize (H1 n).
+    destruct
+      (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2'))
+      eqn:Heq.
+    apply PeanoNat.Nat.leb_le in Heq.
+    split. split.
+    {
+      exact (proj1 (proj1 H1)).
+    }
+    {
+      apply subseq_skip.
+      exact (proj2 (proj1 H1)).
+    }
+    Search leb.
+    {
+      intros.
+      destruct H2.
+      inversion H2; inversion H3; subst; clear H2; clear H3.
+      - inversion H9.
+        exfalso.
+        apply n.
+        auto.
+      - apply (proj2 H1).
+        split.
+        + apply subseq_take.
+          assumption.
+        + assumption.
+      - eapply PeanoNat.Nat.le_trans.
+        2: exact Heq.
+        apply (proj2 H0).
+        split.
+        + assumption.
+        + apply subseq_take.
+          assumption.
+      - apply (proj2 H1).
+        split.
+        + apply subseq_skip.
+          assumption.
+        + assumption.
+    }
+    apply PeanoNat.Nat.leb_gt in Heq.
+    split. split.
+    {
+      apply subseq_skip.
+      exact (proj1 (proj1 H0)).
+    }
+    {
+      exact (proj2 (proj1 H0)).
+    }
+    intros.
+    destruct H2.
+    inversion H2; subst; clear H2.
+    2: {
+      apply (proj2 H0).
+      split; assumption.
+    }
+    inversion H3; subst; clear H3.
+    + exfalso.
+      apply n.
+      reflexivity.
+    + eapply PeanoNat.Nat.le_trans.
+      2: exact Heq.
+      apply le_S.
+      apply (proj2 H1).
+      split.
+      * apply subseq_take.
+        assumption.
+      * assumption.
 Qed.
