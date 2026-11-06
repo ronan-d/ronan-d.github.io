@@ -95,12 +95,27 @@ Proof.
     destruct H0 as [[H01 H02] H0l].
     destruct H1 as [[H11 H12] H1l].
     repeat split.
+    all: cycle 2.
+    intros s0 [Hs1 Hs2].
+    inversion Hs1; subst; clear Hs1.
+    all: cycle 1.
+    eapply PeanoNat.Nat.le_trans. apply H0l.
+    all: cycle 4.
+    inversion Hs2; subst; clear Hs2.
+    1: exfalso. apply n. reflexivity.
+    eapply PeanoNat.Nat.le_trans. apply H1l.
     all: destruct
       (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2'))
       eqn:Heq.
     all: try apply PeanoNat.Nat.leb_le in Heq.
     all: try apply PeanoNat.Nat.leb_gt in Heq.
-    1-4: try assumption.
+    all: try split.
+    all: try assumption.
+    all: try apply subseq_take; try assumption.
+    all: try apply le_n.
+    all: try apply subseq_skip.
+    all: try assumption.
+    lia.
     1-2: apply subseq_skip; assumption.
     all: intros s0 [Hs1 Hs2]; inversion Hs1; subst; clear Hs1.
     1: eapply PeanoNat.Nat.le_trans.
