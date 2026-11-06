@@ -19,7 +19,10 @@ Definition is_lcs s l1 l2 :=
   (forall s0, is_common_subseq s0 l1 l2 -> length s0 <= length s).
 
 (** When equality over [T] is decidable, there exists an effective procedure to
-    construct a longest common subsequence of any pair of lists [(l1, l2)]: *)
+    construct a longest common subsequence of any pair of lists [(l1, l2)]. It
+    has an easy best case when either [l1] or [l2] is the empty list: the empty
+    list is itself an LCS in that case. The recursive case is not as simple and
+    in particular it is rejected by Rocq's termination checker out of the box. *)
 
 Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
 
