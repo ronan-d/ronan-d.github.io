@@ -70,48 +70,15 @@ Proof.
     + apply subseq_take.
       assumption.
     + intros.
-      assert (D: (exists s0', s0 = x1 :: s0')
-                  \/ is_common_subseq s0 l1' l2').
-      {
-        destruct H as [H01 H02].
-        inversion H01; inversion H02; subst; clear H01; clear H02.
-        - left.
-          exists l1.
-          reflexivity.
-        - left.
-          exists l1.
-          reflexivity.
-        - left.
-          exists l0.
-          reflexivity.
-        - right.
-          split; assumption.
-      }
       destruct H as [H01 H02].
-      inversion H01; inversion H02; subst.
-      * specialize (Hl l1).
-        cbn.
-        apply le_n_S.
-        apply Hl.
-        split. assumption.
-        inversion H6; subst.
-        assumption.
-      * cbn.
-        apply le_n_S.
-        apply Hl.
-        split. assumption.
-        apply tail_of_subseq_is_subseq with (x := x1).
-        assumption.
-      * cbn.
-        apply le_n_S.
-        apply Hl.
-        split. apply tail_of_subseq_is_subseq with (x := x1).
-        assumption.
-        assumption.
-      * cbn.
-        apply le_S.
-        apply Hl.
-        split; assumption.
+      inversion H01; inversion H02; subst; clear H01; clear H02; cbn.
+      1-3: apply le_n_S.
+      4: apply le_S.
+      all: apply Hl.
+      1: inversion H6; subst.      
+      all: split.
+      all: try assumption.
+      all: apply tail_of_subseq_is_subseq with (x := x1); assumption.
   - specialize (H0 n).
     specialize (H1 n).
     destruct
@@ -126,7 +93,6 @@ Proof.
       apply subseq_skip.
       exact (proj2 (proj1 H1)).
     }
-    Search leb.
     {
       intros.
       destruct H2.
