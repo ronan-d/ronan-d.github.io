@@ -15,11 +15,8 @@ type Trace = Vec<TraceStep>;
 
 type Diff<T> = Vec<(PresenceTag, T)>;
 
-fn follow_trace<T: Eq + Clone>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<T>> {
+fn follow_trace<T: Eq + Clone>(trace: Trace, mut l1: &[T], mut l2: &[T]) -> Option<Diff<T>> {
     let mut diff = Vec::new();
-
-    let mut l1 = l1;
-    let mut l2 = l2;
 
     let mut steps = trace.into_iter();
 
@@ -56,4 +53,11 @@ fn follow_trace<T: Eq + Clone>(trace: Trace, l1: &[T], l2: &[T]) -> Option<Diff<
     }
 
     Some(diff)
+}
+
+#[logic]
+fn is_compatible<T: Eq>(trace: Seq<TraceStep>, mut l1: Seq<T>, mut l2: Seq<T>) -> bool {
+    let mut steps = trace.into_iter();
+
+    loop
 }
