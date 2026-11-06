@@ -27,6 +27,13 @@ def hide_proof(text, sink):
 
 def process_dir(srcdir, dir):
     tarpath = srcdir / dir.with_suffix("tgz")
+    tarpath.unlink()
+
+    archive = tarfile.open(tarpath, "x:gz")
+
+    # TODO Check and insert the _RocqProject file and the various Makefile-related files.
+
+    # TODO Import the proof-erased Rocq files
 
 def loop_over_dirs(app):
     srcdir = Path(app.srcdir)
