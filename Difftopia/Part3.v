@@ -85,15 +85,16 @@ Proof. (** HIDE *)
     destruct H0 as [[H01 H02] H0l].
     destruct H1 as [[H11 H12] H1l].
     repeat split.
-    all: cycle 2.
+    1,2: shelve.
     intros s0 [Hs1 Hs2].
     inversion Hs1; subst; clear Hs1.
-    all: cycle 1.
+    all: revgoals.
     eapply PeanoNat.Nat.le_trans. apply H0l.
-    all: cycle 4.
+    all: revgoals.
     inversion Hs2; subst; clear Hs2.
     1: exfalso. apply n. reflexivity.
     eapply PeanoNat.Nat.le_trans. apply H1l.
+    Unshelve.
     all: destruct
       (length (lcs_rec l1' (x2 :: l2')) <=? length (lcs_rec (x1 :: l1') l2'))
       eqn:Heq.
