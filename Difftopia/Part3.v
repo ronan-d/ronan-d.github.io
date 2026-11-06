@@ -39,6 +39,10 @@ Proof.
   all: lia.
 Qed.
 
+Lemma some_lemma : forall l x l1 l2,
+  is_common_subseq l (x :: l1) (x :: l2) ->
+  (() \/ todo)
+
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
 Proof.
   intros.
