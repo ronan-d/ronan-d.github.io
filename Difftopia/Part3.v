@@ -40,18 +40,8 @@ Proof.
   all: lia.
 Qed.
 
-Lemma subseq_equal_heads : forall x l1 l2,
-  is_subseq (x :: l1) (x :: l2) -> is_subseq l1 l2.
-Proof.
-  intros.
-  inversion H; subst; clear H.
-  - assumption.
-  - apply tail_of_subseq_is_subseq with (x := x).
-    assumption.
-Qed.
-
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
-Proof.
+Proof. (** HIDE *)
   intros.
   funelim (lcs_rec l1 l2).
   {
