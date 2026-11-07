@@ -27,7 +27,7 @@ def hide_proof(text, sink):
 
 def process_dir(srcdir, dir):
     tarpath = srcdir / dir.with_suffix(".tgz")
-    tarpath.unlink()
+    tarpath.unlink(missing_ok=True)
 
     archive = tarfile.open(tarpath, "x:gz")
 
