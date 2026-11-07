@@ -35,7 +35,11 @@ Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
     
     How will we overcome this termination problem? By using a feature of Rocq
     called the Equations plugin. That means you'll need to take a little tangent
-    and learn a bit about this Equations plugin, unless you know it already. *)
+    and learn a bit about this Equations plugin, unless you know it already.
+    
+    TODO give links to Equations documentation
+    
+    Here's the recursive procedure that returns an LCS of its two parameters: *)
 
 Equations? lcs_rec (l1 l2 : list T) : list T by wf (length l1 + length l2) lt :=
 lcs_rec [] _ := [];
@@ -53,6 +57,12 @@ lcs_rec (x1 :: l1') (x2 :: l2') :=
 Proof.
   all: lia.
 Qed.
+
+(** **** Exercise: 4 stars (lcs_rec_is_lcs)
+
+    Prove that [lcs_rec l1 l2] is indeed an LCS of [l1] and [l2]. The proof might
+    feel a bit repetitive at times; perhaps we'll explore proof factorization
+    techniques in an upcoming part. *)
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
 Proof. (** HIDE *)

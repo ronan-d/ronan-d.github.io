@@ -31,16 +31,28 @@ def process_dir(srcdir, dir):
 
     archive = tarfile.open(tarpath, "x:gz")
 
-    # TODO Check and insert the _RocqProject file and the various Makefile-related files.
-
     rocqproject_path = dir / "_RocqProject"
     expected_contents = "-Q . " + dir.name + "\n"
     with rocqproject_path.open() as f:
         assert f.read_text() == expected_contents
 
-    archive.add(rocqproject_path)
+    well_known_files = [rocqproject_path, dir / "Makefile", dir / "Makefile.conf"]
 
-    # TODO Import the proof-erased Rocq files
+    for file in well_known_files:
+        archive.add(file)
+
+    # We cannot use archive.add for the Rocq files because we need to perform
+    # proof hiding on the contents first.
+
+    rocq_files = dir.glob("*.v")
+
+    for file in rocq_files:
+        info = archive.gettarinfo(file)
+
+        with file.open() as f:
+            text_with_proofs_hidden = hide_proof (f.read_text())
+            file_object = io.BytesIO(text_with_proofs_hidden)
+            archive.addfile(info, file_object)
 
 def loop_over_dirs(app):
     srcdir = Path(app.srcdir)

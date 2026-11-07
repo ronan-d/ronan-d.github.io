@@ -148,6 +148,9 @@ Proof. (** HIDE *)
     assumption.
 Qed.
 
+(** As a conclusion, let's merge the last two theorems into the natural
+    equivalence: *)
+
 Theorem is_subseq_rec_correct : forall l1 l2,
   is_subseq_rec l1 l2 = true <-> is_subseq l1 l2.
 Proof.
