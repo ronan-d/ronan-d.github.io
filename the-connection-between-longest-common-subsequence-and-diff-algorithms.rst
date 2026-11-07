@@ -12,6 +12,6 @@ I made up a name for it: *Difftopia*.
 
 Having worked through volume 1 of Software Foundations is a prerequisite. There are no HTML rendering, only the Rocq files.
 
-You can find Rocq development :download:`here <Difftopia.tgz>`.
+You can find the Rocq development :download:`here <Difftopia.tgz>`.
 
 .. _SF: https://softwarefoundations.cis.upenn.edu/
