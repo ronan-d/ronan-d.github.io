@@ -8,6 +8,8 @@ def hide_proof(text, sink):
 
     replacement = "Proof.\nAdmitted.\n"
 
+    clear_text = text
+
     while True:
         i = clear_text.find(start_marker)
 
