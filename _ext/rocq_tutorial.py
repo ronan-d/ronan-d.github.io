@@ -58,6 +58,7 @@ def process_dir(srcdir, dir):
         file_object = io.BytesIO(file_text.getvalue().encode())
 
         info.size = len(file_object.getbuffer())
+        info = info.replace(name=file.relative_to(srcdir))
 
         archive.addfile(info, file_object)
 
