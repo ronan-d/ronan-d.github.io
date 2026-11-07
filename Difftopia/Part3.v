@@ -62,7 +62,8 @@ Qed.
 
     Prove that [lcs_rec l1 l2] is indeed an LCS of [l1] and [l2]. The proof might
     feel a bit repetitive at times; perhaps we'll explore proof factorization
-    techniques in an upcoming part. *)
+    techniques in an upcoming part. And remember the funelim tactic provided by
+    the Equations plugin! *)
 
 Theorem lcs_rec_is_lcs : forall l1 l2, is_lcs (lcs_rec l1 l2) l1 l2.
 Proof. (** HIDE *)
