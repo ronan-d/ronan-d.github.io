@@ -33,8 +33,7 @@ def process_dir(srcdir, dir):
 
     rocqproject_path = dir / "_RocqProject"
     expected_contents = "-Q . " + dir.name + "\n"
-    with rocqproject_path.open() as f:
-        assert f.read_text() == expected_contents
+    assert rocqproject_path.read_text() == expected_contents
 
     well_known_files = [rocqproject_path, dir / "Makefile", dir / "Makefile.conf"]
 
