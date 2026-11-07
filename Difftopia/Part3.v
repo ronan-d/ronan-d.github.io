@@ -31,7 +31,11 @@ Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
     
     If you need a refresher on Rocq's termination checker, you can look at the
     "Inductively Defined Propositions" chapter of Software Foundations volume 1
-    where it's introduced. *)
+    where it's introduced.
+    
+    How will we overcome this termination problem? By using a feature of Rocq
+    called the Equations plugin. That means you'll need to take a little tangent
+    and learn a bit about this Equations plugin, unless you know it already. *)
 
 Equations? lcs_rec (l1 l2 : list T) : list T by wf (length l1 + length l2) lt :=
 lcs_rec [] _ := [];

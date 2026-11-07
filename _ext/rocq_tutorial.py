@@ -38,7 +38,7 @@ def process_dir(srcdir, dir):
     with rocqproject_path.open() as f:
         assert f.read_text() == expected_contents
 
-        info = archive.add(rocqproject_path)
+    archive.add(rocqproject_path)
 
     # TODO Import the proof-erased Rocq files
 
