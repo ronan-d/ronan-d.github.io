@@ -92,13 +92,9 @@ Proof. (** HIDE *)
     inversion H.
   }
   intros.
-  assert (is_subseq l1 l2').
-  {
-    inversion H; clear H; subst.
-    - assumption.
-    - apply (IH x l1).
-      assumption.
-  }
   apply subseq_skip.
-  assumption.
+  inversion H; clear H; subst.
+  - assumption.
+  - apply (IH x l1).
+    assumption.
 Qed.
