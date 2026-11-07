@@ -48,9 +48,8 @@ def process_dir(srcdir, dir):
     for file in rocq_files:
         info = archive.gettarinfo(file)
 
-        text_with_proofs_hidden = hide_proof (file.read_text())
-
-        file_object = io.BytesIO(text_with_proofs_hidden)
+        file_object = io.BytesIO()
+        text_with_proofs_hidden = hide_proof (file.read_text(), file_object)
 
         archive.addfile(info, file_object)
 
