@@ -42,7 +42,7 @@ def process_dir(srcdir, dir):
     well_known_files = [rocqproject_path, dir / "Makefile", dir / "Makefile.conf"]
 
     for file in well_known_files:
-        archive.add(file)
+        archive.add(file, arcname=file.relative_to(srcdir))
 
     # We cannot use archive.add for the Rocq files because we need to perform
     # proof hiding on the contents first.
