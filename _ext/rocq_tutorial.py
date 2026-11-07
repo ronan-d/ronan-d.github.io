@@ -2,6 +2,7 @@ import io
 from pathlib import Path
 import tarfile
 
+
 def hide_proof(text, sink):
     start_marker = "Proof. (** HIDE *)\n"
     end_marker = "Qed.\n"
@@ -27,6 +28,7 @@ def hide_proof(text, sink):
 
         clear_text = clear_text[i + len(end_marker) :]
 
+
 def process_dir(srcdir, dir):
     tarpath = srcdir / dir.with_suffix(".tgz")
     tarpath.unlink(missing_ok=True)
@@ -50,16 +52,21 @@ def process_dir(srcdir, dir):
     for file in rocq_files:
         info = archive.gettarinfo(file)
 
-        file_object = io.BytesIO()
-        text_with_proofs_hidden = hide_proof (file.read_text(), file_object)
+        file_text = io.StringIO()
+        hide_proof(file.read_text(), file_text)
+
+        file_object = io.BytesIO(file_text.getvalue().encode())
+
+        info.size = len(file_object.getbuffer())
 
         archive.addfile(info, file_object)
 
     archive.close()
 
+
 def loop_over_dirs(app):
     srcdir = Path(app.srcdir)
-    
+
     for dir in app.config.rocq_tutorial_dirs:
         process_dir(srcdir, srcdir / dir)
 
