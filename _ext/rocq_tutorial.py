@@ -54,6 +54,8 @@ def process_dir(srcdir, dir):
             file_object = io.BytesIO(text_with_proofs_hidden)
             archive.addfile(info, file_object)
 
+    archive.close()
+
 def loop_over_dirs(app):
     srcdir = Path(app.srcdir)
     
