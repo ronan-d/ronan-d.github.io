@@ -26,7 +26,7 @@ def hide_proof(text, sink):
         clear_text = clear_text[i + len(end_marker) :]
 
 def process_dir(srcdir, dir):
-    tarpath = srcdir / dir.with_suffix("tgz")
+    tarpath = srcdir / dir.with_suffix(".tgz")
     tarpath.unlink()
 
     archive = tarfile.open(tarpath, "x:gz")
