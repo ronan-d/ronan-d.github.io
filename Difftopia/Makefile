@@ -45,7 +45,7 @@ HASNATDYNLINK     := $(COQMF_HASNATDYNLINK)
 OCAMLWARN         := $(COQMF_WARN)
 
 Makefile.conf: 
-	rocq makefile -Q . Difftopia -o Makefile Part1.v
+	rocq makefile -Q . Difftopia -o Makefile Part1.v Part2.v
 
 # This file can be created by the user to hook into double colon rules or
 # add any other Makefile code they may need
