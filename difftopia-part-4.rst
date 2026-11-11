@@ -82,7 +82,8 @@ red lines and green lines.
 
 As for the "longest" part of "longest common subsequence", it's hard to see
 at a glance but I'll eat my hat if you can find a longer one. Also, the :command:`diff`
-program wouldn't be very good if 
+program wouldn't be very good if didn't show the largest possible common part of its
+input files.
 
 We've just seen that when you have a diff, you also have a longest common subsequence.
 Before that, we gave a formal definition of longest common subsequences alongside a
