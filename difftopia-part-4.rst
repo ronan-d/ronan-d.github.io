@@ -74,8 +74,8 @@ that are neither red nor green`. (Here :code:`T` of the Rocq development is the 
 of lines of text and lists are displayed top-down.)
 
 To convince yourself that the sequence of common lines is a subsequence of the first
-text sample, You can even mechanically reconstruct the corresponding
-
-If you read the diff from bottom to top, red lines correspond to applications of
-:code:`subseq_skip` for the first text sample and the same goes for green lines
-and the second sample. The gray 
+text sample, you can mechanically reconstruct the corresponding :code:`is_subseq`
+term by reading the diff from bottop to top. Red lines correspond to applications of
+:code:`subseq_skip`, gray lines to applications of :code:`subseq_take` and green lines
+can just be ignored. The same goes for the second text sample if you swap the roles of
+red lines and green lines.
