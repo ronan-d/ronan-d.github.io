@@ -10,7 +10,7 @@ longest common subsequence of these two lists. But so far we haven't said much a
 what longest common subsequences are good for.
 
 Let's remedy that. If you have done software development before, you probably have seen
-longest common subsequences many times. In fact, each time you've looked at the :strong:`diff`
+longest common subsequences many times. Each time you've looked at the :strong:`diff`
 of a git commit, for example.
 
 Let me elaborate. I'll lean on an example taken from `the GNU diffutils documentation <diffutils_>`_.
