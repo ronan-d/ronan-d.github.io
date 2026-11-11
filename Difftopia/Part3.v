@@ -36,10 +36,13 @@ Parameter T_eq : forall (x y : T), {x = y} + {x <> y}.
     How will we overcome this termination problem? By using a feature of Rocq
     called the Equations plugin. That means you'll need to take a little tangent
     and learn a bit about this Equations plugin, unless you know it already.
+
+    The Equations plugin is documented at https://rocq-prover.org/docs/equations-docs.
+    The documentation has four parts. You need to look at the first three, up to
+    "Equations and Well-Founded Recursion" that we will need.
     
-    TODO give links to Equations documentation
-    
-    Here's the recursive procedure that returns an LCS of its two parameters: *)
+    Are you done with the Equations plugin tutorial? Good! Now here's the recursive
+    procedure that returns an LCS of its two parameters: *)
 
 Equations? lcs_rec (l1 l2 : list T) : list T by wf (length l1 + length l2) lt :=
 lcs_rec [] _ := [];
