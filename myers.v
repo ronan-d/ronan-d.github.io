@@ -691,13 +691,56 @@ Proof.
   apply lcp_prefix.
 Qed.
 
-Theorem follow_diagonal_nondecreasing_reach : forall d1 d2,
+Theorem follow_diagonal_nondecreasing_reach : forall s1 s2 d1 d2,
+  s1 = strip_prefix (extract_left d1) l1 ->
+  s2 = strip_prefix (extract_right d1) l1 ->
   is_path d1 -> is_path d2 ->
   diagonal d1 = diagonal d2 ->
   reach d1 <= reach d2 ->
   reach (follow_diagonal d1) <= reach (follow_diagonal d2).
 Proof.
+  induction s1 as [| x1 s1' IH ].
+  {
+    intros.
+    destruct H1.
+    destruct H2.
+    unfold is_prefix in H1,H2.
+    unfold strip_prefix in H.
+    assert (G := firstn_skipn (length (extract_left d1)) l1).
+    rewrite <- H in G.
+    rewrite app_nil_r in G.
+    rewrite <- H1 in G.
+    assert (extract_left d2 = l1).
+    {
+      rewrite H2.
+      apply firstn_all2.
+      rewrite <- G.
+      unfold reach in H4.
+      exact H4.
+    }
+    unfold reach.
+    unfold follow_diagonal.
+    unfold available_lcp.
+    unfold strip_prefix.
+    rewrite <- H.
+    cbn.
+    rewrite H7.
+    rewrite (skipn_all l1).
+    cbn.
+    rewrite app_nil_r.
+    rewrite app_nil_r.
+    rewrite G,H7.
+    apply le_n.
+  }
+
+
+  unfold is_path.
+  unfold is_prefix.
   intros.
+  destruct H.
+  assert (G11 := firstn_skipn (length (extract_left d1)) l1).
+  rewrite <- H in G11.
+  unfold reach in H2.
 Qed.
 
 Definition take_left_and_advance (d : diff) : option diff :=
