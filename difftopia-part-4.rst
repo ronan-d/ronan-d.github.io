@@ -48,7 +48,7 @@ Consider the two following snippets of text:
    Deeper and more profound,
    The door of all subtleties!
 
-And now consider their diff:
+And now consider their diff (as produced by :code:`diff -U 50`):
 
 .. code-block:: diff
 
@@ -79,3 +79,9 @@ term by reading the diff from bottop to top. Red lines correspond to application
 :code:`subseq_skip`, gray lines to applications of :code:`subseq_take` and green lines
 can just be ignored. The same goes for the second text sample if you swap the roles of
 red lines and green lines.
+
+As for the "longest" part of "longest common subsequence", it's hard to see
+at a glance but I'll eat my hat if you can find a longer one. Also, the :command:`diff`
+program wouldn't be very good if 
+
+We've just seen that when you have a diff, you also have a longest 
