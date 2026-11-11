@@ -10,8 +10,8 @@ longest common subsequence of these two lists. But so far we haven't said much a
 what longest common subsequences are good for.
 
 Let's remedy that. If you have done software development before, you probably have seen
-longest common subsequences many times. Each time you've looked at the :strong:`diff`
-of a git commit, for example.
+longest common subsequences many times. Each time you've looked at the diff of a git commit,
+for example.
 
 Let me elaborate. I'll lean on an example taken from `the GNU diffutils documentation <diffutils_>`_.
 Consider the two following snippets of text:
@@ -70,7 +70,7 @@ And now consider their diff (as produced by :code:`diff -U 50`):
    +The door of all subtleties!
 
 There is a longest common subsequence here: the sequence composed of the :strong:`lines
-that are neither red nor green`. (Here :code:`T` of the Rocq development is the type
+that are neither red nor green`. (Here the :code:`T` of the Rocq development is the type
 of lines of text and lists are displayed top-down.)
 
 To convince yourself that the sequence of common lines is a subsequence of the first
