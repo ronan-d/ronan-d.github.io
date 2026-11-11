@@ -699,9 +699,21 @@ Theorem follow_diagonal_nondecreasing_reach : forall d1 d2,
 Proof.
   unfold is_path.
   unfold is_prefix.
-  unfold reach.
+  unfold reach,follow_diagonal,available_lcp.
   intros.
-  Search (_ - ?x + ?x).
+  Check Nat.sub_add.
+  destruct H0.
+  rewrite <- (Nat.sub_add _ _ H2) in H0.
+  Check firstn_app_2.
+  replace
+    (length (extract_left d2) - length (extract_left d1) + length (extract_left d1))
+  with
+    (length (extract_left d1) + (length (extract_left d2)) - length (extract_left d1))
+  in H0.
+  2: lia.
+  destruct H.
+  destruct
+  rewrite firstn_app_2 in H0.
 Qed.
 
 Definition take_left_and_advance (d : diff) : option diff :=

@@ -32,7 +32,9 @@ fn tail_of_subseq_is_subseq<T>(x: T, l1: Seq<T>, l2: Seq<T>) {
         proof_assert!(is_subseq(l1, l2.tail()));
 
         if 0 < l1.len() {
-            tail_of_subseq_is_subseq(l1[0], l1.tail(), l2.tail());
+            if l1[0] == l2[0] {
+                tail_of_subseq_is_subseq(l1[0], l1.tail(), l2.tail());
+            }
         }
     }
 }
