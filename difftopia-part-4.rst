@@ -72,3 +72,10 @@ And now consider their diff:
 There is a longest common subsequence here: the sequence composed of the :strong:`lines
 that are neither red nor green`. (Here :code:`T` of the Rocq development is the type
 of lines of text and lists are displayed top-down.)
+
+To convince yourself that the sequence of common lines is a subsequence of the first
+text sample, You can even mechanically reconstruct the corresponding
+
+If you read the diff from bottom to top, red lines correspond to applications of
+:code:`subseq_skip` for the first text sample and the same goes for green lines
+and the second sample. The gray 

@@ -732,7 +732,8 @@ Proof.
     rewrite G,H7.
     apply le_n.
   }
-
+  unfold follow_diagonal.
+  unfold available_lcp.
 
   unfold is_path.
   unfold is_prefix.
