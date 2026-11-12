@@ -584,6 +584,35 @@ Proof.
   split; reflexivity.
 Qed.
 
+Theorem lcp_nondecreasing : forall s1 s2 n,
+  is_prefix (longest_common_prefix s1 s2) (firstn n s1) \/
+  longest_common_prefix s1 s2 =
+  (firstn n s1) ++ longest_common_prefix (skipn n s1) (skipn n s2).
+Proof.
+  induction s1 as [| x1 s1' IH ].
+  {
+    cbn.
+    left.
+    unfold is_prefix.
+    rewrite firstn_nil.
+    rewrite firstn_nil.
+    reflexivity.
+  }
+  intros.
+  destruct s2 as [| x2 s2' ].
+  {
+    left.
+    unfold is_prefix.
+    reflexivity.
+  }
+  cbn.
+  destruct (T_eq x1 x2).
+  - subst x2.
+    rename x1 into x.
+    destruct n as [| n' ].
+Qed.
+
+
 Theorem app_prefix : forall p1 p2 l,
   is_prefix p1 l ->
   is_prefix p2 (strip_prefix p1 l) ->
@@ -701,19 +730,20 @@ Proof.
   unfold is_prefix.
   unfold reach,follow_diagonal,available_lcp.
   intros.
-  Check Nat.sub_add.
-  destruct H0.
-  rewrite <- (Nat.sub_add _ _ H2) in H0.
-  Check firstn_app_2.
-  replace
-    (length (extract_left d2) - length (extract_left d1) + length (extract_left d1))
-  with
-    (length (extract_left d1) + (length (extract_left d2)) - length (extract_left d1))
-  in H0.
-  2: lia.
-  destruct H.
-  destruct
-  rewrite firstn_app_2 in H0.
+  Check skipn_skipn.
+  set (n1 := length (extract_left d1)).
+  set (n2 := length (extract_left d2)).
+  set (m := n2 - n1).
+  assert (skipn n1 l1 = firstn m (skipn n1 l1) ++ skipn n2 l1).
+  {
+    rewrite <- (firstn_skipn m (skipn n1 l1)) at 1.
+    apply f_equal.
+    rewrite skipn_skipn.
+    replace (m + n1) with n2.
+    1: reflexivity.
+    lia.
+  }
+
 Qed.
 
 Definition take_left_and_advance (d : diff) : option diff :=
