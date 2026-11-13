@@ -584,7 +584,7 @@ Proof.
   split; reflexivity.
 Qed.
 
-Theorem lcp_nondecreasing : forall s1 s2 n,
+Theorem lcp_skipn : forall s1 s2 n,
   is_prefix (longest_common_prefix s1 s2) (firstn n s1) \/
   longest_common_prefix s1 s2 =
   (firstn n s1) ++ longest_common_prefix (skipn n s1) (skipn n s2).
@@ -632,6 +632,22 @@ Proof.
     reflexivity.
 Qed.
 
+Theorem lcp_nondecreasing : forall s1 s2 n,
+  length (longest_common_prefix s1 s2) <=
+  n + length (longest_common_prefix (skipn n s1) (skipn n s2)).
+Proof.
+  intros.
+  destruct (lcp_skipn s1 s2 n).
+  - unfold is_prefix in H.
+    rewrite H.
+    rewrite length_firstn.
+    rewrite length_firstn.
+    lia.
+  - rewrite H.
+    rewrite length_app.
+    rewrite length_firstn.
+    lia.
+Qed.
 
 Theorem app_prefix : forall p1 p2 l,
   is_prefix p1 l ->
