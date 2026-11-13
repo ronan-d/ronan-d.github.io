@@ -610,6 +610,26 @@ Proof.
   - subst x2.
     rename x1 into x.
     destruct n as [| n' ].
+    {
+      cbn.
+      destruct (T_eq x x).
+      2: intuition.
+      right.
+      reflexivity.
+    }
+    cbn.
+    destruct (IH s2' n').
+    + left.
+      unfold is_prefix.
+      unfold is_prefix in H.
+      rewrite H at 1.
+      reflexivity.
+    + right.
+      rewrite <- H.
+      reflexivity.
+  - left.
+    unfold is_prefix.
+    reflexivity.
 Qed.
 
 
