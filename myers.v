@@ -526,12 +526,8 @@ Fixpoint cost (d : diff) : nat := match d with
 | (both, _) :: d' => cost d'
 end.
 
-Fixpoint diagonal (d : diff) : Z := match d with
-| [] => Z0
-| (only_left, _) :: d' => (diagonal d' + 1)%Z
-| (only_right, _) :: d' => (diagonal d' - 1)%Z
-| (both, _) :: d' => diagonal d'
-end.
+Definition diagonal (d : diff) : Z :=
+  Z.of_nat (length (extract_left d)) - Z.of_nat (length (extract_right d)).
 
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
    same diagonal. *)
@@ -756,16 +752,26 @@ Proof.
   apply lcp_prefix.
 Qed.
 
-Theorem follow_diagonal_nondecreasing_reach : forall d1 d2,
-  is_path d1 -> is_path d2 ->
-  diagonal d1 = diagonal d2 ->
-  reach d1 <= reach d2 ->
-  reach (follow_diagonal d1) <= reach (follow_diagonal d2).
+Theorem follow_diagonal_nondecreasing_reach : forall da db,
+  is_path da -> is_path db ->
+  diagonal da = diagonal db ->
+  reach da <= reach db ->
+  reach (follow_diagonal da) <= reach (follow_diagonal db).
 Proof.
   unfold is_path.
   unfold is_prefix.
   unfold reach,follow_diagonal,available_lcp.
   intros.
+  unfold strip_prefix.
+  set (na1 := length (extract_left da)).
+  set (na2 := length (extract_right da)).
+  set (nb1 := length (extract_left db)).
+  set (nb2 := length (extract_right db)).
+  set (m := na2 - na1).
+  assert (nb2 - na2 = m).
+  {
+    unfold diagonal in H1.
+  }
   rewrite extract_left_app.
   rewrite extract_left_app.
   rewrite length_app at 1.
