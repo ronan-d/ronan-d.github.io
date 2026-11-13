@@ -766,20 +766,22 @@ Proof.
   unfold is_prefix.
   unfold reach,follow_diagonal,available_lcp.
   intros.
-  Check skipn_skipn.
-  set (n1 := length (extract_left d1)).
-  set (n2 := length (extract_left d2)).
-  set (m := n2 - n1).
-  assert (skipn n1 l1 = firstn m (skipn n1 l1) ++ skipn n2 l1).
-  {
-    rewrite <- (firstn_skipn m (skipn n1 l1)) at 1.
-    apply f_equal.
-    rewrite skipn_skipn.
-    replace (m + n1) with n2.
-    1: reflexivity.
-    lia.
-  }
-
+  rewrite extract_left_app.
+  rewrite extract_left_app.
+  rewrite length_app at 1.
+  rewrite length_app at 1.
+  apply Nat.add_le_mono.
+  1: assumption.
+  unfold extract_left.
+  rewrite length_map.
+  rewrite length_map.
+  rewrite filter_map_swap.
+  rewrite filter_ext with (g := fun _ => true).
+  rewrite filter_true.
+  2: reflexivity.
+  rewrite length_map.
+  unfold strip_prefix.
+  unfold extract_right.
 Qed.
 
 Definition take_left_and_advance (d : diff) : option diff :=
