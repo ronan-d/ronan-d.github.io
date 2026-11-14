@@ -2,7 +2,6 @@ import io
 from pathlib import Path
 import tarfile
 
-
 def hide_proof(text, sink):
     start_marker = "Proof. (** HIDE *)\n"
     end_marker = "Qed.\n"
