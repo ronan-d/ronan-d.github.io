@@ -698,7 +698,13 @@ Proof. (** HIDE *)
   - exists k.
     split. assumption.
     split. assumption.
-    assumption.
+    unfold diagonal in IH3.
+    unfold diagonal.
+    cbn.
+    cbn in IH3.
+    rewrite <- IH3.
+    unfold extract_left,extract_right.
+    lia.
   - exists (k + 1).
     split. lia.
     split. cbn. lia.
