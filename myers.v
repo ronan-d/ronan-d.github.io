@@ -526,15 +526,15 @@ Fixpoint cost (d : diff) : nat := match d with
 | (both, _) :: d' => cost d'
 end.
 
-Definition diagonal (d : diff) : Z :=
-  Z.of_nat (length (extract_left d)) - Z.of_nat (length (extract_right d)).
-
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
    same diagonal. *)
 Definition reach (d : diff) : nat :=
   length (extract_left d).
 
 Parameter (l1 l2 : list T).
+
+Definition diagonal (d : diff) : nat :=
+  length (extract_left d) + length l2 - length (extract_right d).
 
 Definition diag (index : Z) : list (T * T) := match index with
 | Z0 => combine l1 l2
@@ -700,11 +700,7 @@ Proof. (** HIDE *)
     split. assumption.
     unfold diagonal in IH3.
     unfold diagonal.
-    cbn.
-    cbn in IH3.
-    rewrite <- IH3.
-    unfold extract_left,extract_right.
-    lia.
+
   - exists (k + 1).
     split. lia.
     split. cbn. lia.
