@@ -93,6 +93,10 @@ Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
     its arguments. Do not hesitate to write the procedure as a toplevel definition
     above the proof placeholder. *)
 
+(** BEGIN HIDE *)
+(** Il n'y a rien ici. *)
+(** END HIDE *)
+
 Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
   forall l1 l2, is_diff (f l1 l2) l1 l2.
 Proof. (** HIDE *)
