@@ -675,40 +675,10 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
     length (extract_left d0) <= length (extract_left d).
 
 Lemma myers_lemma1 : forall d, exists k,
-  0 <= k /\ k <= cost d /\
-  diagonal d = Z.sub (Z.of_nat (2 * k)) (Z.of_nat (cost d)).
+  0 <= k /\ k <= cost d /\ is_path d /\
+  diagonal d = length l2 - cost d + 2 * k.
 Proof. (** HIDE *)
-  induction d as [| [tag x] d' IH ].
-  {
-    exists 0.
-    split.
-    {
-      apply le_n.
-    }
-    split.
-    {
-      cbn.
-      apply le_n.
-    }
-    cbn.
-    reflexivity.
-  }
-  destruct IH as [k [IH1 [IH2 IH3]]].
-  destruct tag.
-  - exists k.
-    split. assumption.
-    split. assumption.
-    unfold diagonal in IH3.
-    unfold diagonal.
-
-  - exists (k + 1).
-    split. lia.
-    split. cbn. lia.
-    cbn. lia.
-  - exists k.
-    split. lia.
-    split. cbn. lia.
-    cbn. lia.
+  
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
