@@ -72,3 +72,18 @@ Proof. (** HIDE *)
   try apply subseq_skip;
   assumption.
 Qed.
+
+(** So far, the [diff] type we defined does not say anything about _longest_
+    common subsequences. But, as we touched on in part 4, a proper diff of two
+    lists [l1] and [l2] has a maximal common part. The following relation captures
+    this: *)
+
+Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
+  l1 = extract_first d /\
+  l2 = extract_second d /\
+  is_lcs (extract_common d) l1 l2.
+
+(** Do you remember the [lcs_rec] procedure from part 3? It is possible
+    and relatively simple to extend it into a procedure that returns a diff of
+    [l1] and [l2] instead of just an LCS of [l1] and [l2]. *)
+
