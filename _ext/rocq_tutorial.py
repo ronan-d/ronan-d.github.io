@@ -25,10 +25,10 @@ def hide_proofs(text, sink, start_marker, end_marker, replacement):
 def hide(text):
     l = [
         ("Proof. (** HIDE *)\n", "Qed.\n", "Proof.\nAdmitted.\n"),
-        ("(** BEGIN HIDE *)\n", "", "(** END HIDE *)\n"),
+        ("(** BEGIN HIDE *)\n", "(** END HIDE *)\n", ""),
     ]
 
-    for start_mark, replacement, end_mark in l:
+    for start_mark, end_mark, replacement in l:
         sink = io.StringIO()
         hide_proofs(text, sink, start_mark, end_mark, replacement)
         text = sink.getvalue()
