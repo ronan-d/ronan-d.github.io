@@ -25,7 +25,7 @@ def hide_proofs(text, sink, start_marker, end_marker, replacement):
 def hide(text):
     l = [
         ("Proof. (** HIDE *)\n", "Qed.\n", "Proof.\nAdmitted.\n"),
-        ("(** BEGIN HIDE *)\n", "(** END HIDE *)\n", ""),
+        ("(** BEGIN HIDE *)\n", "(** END HIDE *)\n", "\n"),
     ]
 
     for start_mark, end_mark, replacement in l:
