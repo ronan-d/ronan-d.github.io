@@ -75,7 +75,7 @@ of lines of text and lists are displayed top-down.)
 
 To convince yourself that the sequence of common lines is a subsequence of the first
 text sample, you can mechanically reconstruct the corresponding :code:`is_subseq`
-term by reading the diff from bottop to top. Red lines correspond to applications of
+term by reading the diff from bottom to top. Red lines correspond to applications of
 :code:`subseq_skip`, gray lines to applications of :code:`subseq_take` and green lines
 can just be ignored. The same goes for the second text sample if you swap the roles of
 red lines and green lines.
