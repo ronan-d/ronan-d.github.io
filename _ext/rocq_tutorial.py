@@ -2,12 +2,7 @@ import io
 from pathlib import Path
 import tarfile
 
-def hide_proof(text, sink):
-    start_marker = "Proof. (** HIDE *)\n"
-    end_marker = "Qed.\n"
-
-    replacement = "Proof.\nAdmitted.\n"
-
+def hide_proofs(text, sink, start_marker, end_marker, replacement):
     clear_text = text
 
     while True:
@@ -27,6 +22,18 @@ def hide_proof(text, sink):
 
         clear_text = clear_text[i + len(end_marker) :]
 
+def hide(text):
+    l = [
+        ("Proof. (** HIDE *)\n", "Qed.\n", "Proof.\nAdmitted.\n"),
+        ("(** BEGIN HIDE *)\n", "", "(** END HIDE *)\n"),
+    ]
+
+    for start_mark, end_mark, replacement in l:
+        sink = io.StringIO()
+        hide_proofs(text, sink, start_mark, end_mark, replacement)
+        text = sink.getvalue()
+
+    return text
 
 def process_dir(srcdir, dir):
     tarpath = srcdir / dir.with_suffix(".tgz")
@@ -51,10 +58,9 @@ def process_dir(srcdir, dir):
     for file in rocq_files:
         info = archive.gettarinfo(file)
 
-        file_text = io.StringIO()
-        hide_proof(file.read_text(), file_text)
+        hidden = hide(file.read_text())
 
-        file_object = io.BytesIO(file_text.getvalue().encode())
+        file_object = io.BytesIO(hidden.encode())
 
         info.size = len(file_object.getbuffer())
         info.name = file.relative_to(srcdir).as_posix()
