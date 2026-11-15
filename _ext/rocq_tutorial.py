@@ -28,7 +28,7 @@ def hide(text):
         ("(** BEGIN HIDE *)\n", "", "(** END HIDE *)\n"),
     ]
 
-    for start_mark, end_mark, replacement in l:
+    for start_mark, replacement, end_mark in l:
         sink = io.StringIO()
         hide_proofs(text, sink, start_mark, end_mark, replacement)
         text = sink.getvalue()
