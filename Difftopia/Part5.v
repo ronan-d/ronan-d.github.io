@@ -87,3 +87,13 @@ Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
     and relatively simple to extend it into a procedure that returns a diff of
     [l1] and [l2] instead of just an LCS of [l1] and [l2]. *)
 
+(** **** Exercise: 4 stars (exists_diff_rec)
+
+    Taking inspiration from [lcs_rec], write a procedure that returns a diff of
+    its arguments. Do not hesitate to write the procedure as a toplevel definition
+    above the proof placeholder. *)
+
+Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
+  forall l1 l2, is_diff (f l1 l2) l1 l2.
+Proof. (** HIDE *)
+Qed.
