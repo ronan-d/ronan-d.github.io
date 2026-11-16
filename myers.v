@@ -520,11 +520,11 @@ Proof.
         exact IH.
 Qed.
 
-Fixpoint cost (d : diff) : nat := match d with
-| [] => O
-| (only_left, _) :: d' | (only_right, _) :: d' => S (cost d')
-| (both, _) :: d' => cost d'
-end.
+Definition cost (d : diff) : nat :=
+  length (filter (fun x => match x with
+  | (only_left, _) | (only_right, _) => true
+  | (both, _) => true
+  end) d).
 
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
    same diagonal. *)
@@ -674,11 +674,14 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
      diagonal d0 = diagonal d) ->
     length (extract_left d0) <= length (extract_left d).
 
-Lemma myers_lemma1 : forall d, exists k,
-  0 <= k /\ k <= cost d /\ is_path d /\
-  diagonal d = length l2 - cost d + 2 * k.
+Lemma myers_lemma1 : forall d,
+  is_path d ->
+  exists k, k <= cost d /\ diagonal d = length l2 - cost d + 2 * k.
 Proof. (** HIDE *)
-  
+  intros.
+  exists (length (extract_right d)).
+  split.
+  - unfold extract_right,cost.
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
