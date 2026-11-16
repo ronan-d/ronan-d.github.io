@@ -145,12 +145,11 @@ Inductive presence_tag :=
 
 Definition diff := list (presence_tag * T).
 
-Definition present_in_left (x : presence_tag * T) : bool := match fst x with
-| both | only_left => true
-| only_right => false
-end.
-
-Definition extract_left (d : diff) : list T := map snd (filter present_in_left d).
+Definition extract_left (d : diff) : list T :=
+  map snd (filter (fun '(t, _) => match t with
+  | only_left | both => true
+  | only_right => false
+  end) d).
 
 Theorem extract_left_app : forall d1 d2,
   extract_left (d1 ++ d2) = extract_left d1 ++ extract_left d2.
@@ -167,7 +166,11 @@ Definition present_in_right (x : presence_tag * T) : bool := match fst x with
 | only_left => false
 end.
 
-Definition extract_right (d : diff) : list T := map snd (filter present_in_right d).
+Definition extract_right (d : diff) : list T :=
+  map snd (filter (fun '(t, _) => match t with
+  | only_right | both => true
+  | only_left => false
+  end) d).
 
 Theorem extract_right_app : forall d1 d2,
   extract_right (d1 ++ d2) = extract_right d1 ++ extract_right d2.
@@ -682,7 +685,7 @@ Proof. (** HIDE *)
   exists (length (extract_right d)).
   split.
   - unfold extract_right,cost.
-    
+
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
