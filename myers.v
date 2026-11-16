@@ -521,9 +521,9 @@ Proof.
 Qed.
 
 Definition cost (d : diff) : nat :=
-  length (filter (fun x => match x with
-  | (only_left, _) | (only_right, _) => true
-  | (both, _) => true
+  length (filter (fun '(t, x) => match t with
+  | only_left | only_right => true
+  | both => false
   end) d).
 
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
@@ -682,6 +682,7 @@ Proof. (** HIDE *)
   exists (length (extract_right d)).
   split.
   - unfold extract_right,cost.
+    
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix

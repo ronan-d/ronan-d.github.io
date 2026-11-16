@@ -1,4 +1,8 @@
-From Stdlib Require Import List. Import ListNotations.
+From Corelib Require Import Nat.
+
+From Stdlib Require Import List Lia. Import ListNotations.
+
+From Equations Require Import Equations.
 
 From Difftopia Require Import Part1.
 From Difftopia Require Import Part3.
@@ -94,10 +98,26 @@ Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
     above the proof placeholder. *)
 
 (** BEGIN HIDE *)
-Equations? diff_rec (l1 l2 : list T) : list T by wf (length l1 + length l2) 
+Equations? diff_rec (l1 l2 : list T) : diff by wf (length l1 + length l2) :=
+diff_rec [] _ := [];
+diff_rec _ [] := [];
+diff_rec (x1 :: l1') (x2 :: l2') :=
+  if (T_eq x1 x2) then
+    (both, x1) :: diff_rec l1' l2'
+  else
+    let c1 := diff_rec l1' (x2 :: l2') in
+    let c2 := diff_rec (x1 :: l1') l2' in
+    if length c1 <=? length c2 then
+      (only_second, x2) :: c2
+    else
+      (only_first, x1) :: c1.
+Proof.
+  all: lia.
+Qed.
 (** END HIDE *)
 
 Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
   forall l1 l2, is_diff (f l1 l2) l1 l2.
 Proof. (** HIDE *)
+  exists diff_rec.
 Qed.
