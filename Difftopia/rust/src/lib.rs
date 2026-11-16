@@ -27,7 +27,6 @@ fn tail_of_subseq_is_subseq<T>(x: T, l1: Seq<T>, l2: Seq<T>) {
         if x == l2[0] {
             proof_assert!(is_subseq(l1, l2.tail()));
         } else {
-            proof_assert!(is_subseq(Seq::cons(x, l1), l2.tail()));
             tail_of_subseq_is_subseq(x, l1, l2.tail());
             proof_assert!(is_subseq(l1, l2.tail()));
         }

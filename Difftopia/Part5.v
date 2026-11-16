@@ -94,7 +94,7 @@ Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
     above the proof placeholder. *)
 
 (** BEGIN HIDE *)
-(** Il n'y a rien ici. *)
+Equations? diff_rec (l1 l2 : list T)
 (** END HIDE *)
 
 Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
