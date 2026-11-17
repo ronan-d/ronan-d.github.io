@@ -99,8 +99,8 @@ Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
 
 (** BEGIN HIDE *)
 Equations? diff_rec (l1 l2 : list T) : diff by wf (length l1 + length l2) :=
-diff_rec [] _ := [];
-diff_rec _ [] := [];
+diff_rec [] l2 := map (fun x => (only_second, x)) l2;
+diff_rec l1 [] := map (fun x => (only_first, x)) l1;
 diff_rec (x1 :: l1') (x2 :: l2') :=
   if (T_eq x1 x2) then
     (both, x1) :: diff_rec l1' l2'
@@ -120,4 +120,21 @@ Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
   forall l1 l2, is_diff (f l1 l2) l1 l2.
 Proof. (** HIDE *)
   exists diff_rec.
+  intros.
+  funelim (diff_rec l1 l2).
+  {
+    split.
+    2: split.
+    - unfold extract_first.
+      rewrite filter_map_swap.
+      rewrite filter_false.
+      reflexivity.
+    - unfold extract_second.
+      rewrite filter_map_swap.
+      rewrite filter_true.
+      rewrite map_map.
+      cbn.
+      symmetry.
+      apply map_id.
+  }
 Qed.
