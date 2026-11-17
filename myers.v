@@ -682,10 +682,10 @@ Lemma myers_lemma1 : forall d,
   exists k, k <= cost d /\ diagonal d = length l2 - cost d + 2 * k.
 Proof. (** HIDE *)
   intros.
-  exists (length (extract_right d)).
+  exists (length (filter (fun '(t, _) => match t with only_right) d)).
   split.
   - unfold extract_right,cost.
-
+    rewrite length_map.
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
