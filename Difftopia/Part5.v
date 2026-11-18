@@ -139,6 +139,8 @@ Proof. (** HIDE *)
     + cbn.
       specialize (H0 n).
       specialize (H1 n).
-      rewrite H0,H1.
+      assert (L : forall d1 d2, length d1 <= length d2 -> length (extract_common))
+      destruct (length (diff_rec l1' (x2 :: l2')) <=? length (diff_rec (x1 :: l1') l2')).
+
   }
 Qed.
