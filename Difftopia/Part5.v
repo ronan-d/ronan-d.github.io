@@ -121,33 +121,17 @@ Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
 Proof. (** HIDE *)
   exists diff_rec.
   intros.
-  split.
-  funelim (diff_rec l1 l2).
+  split. 2: split.
+  1,2: shelve.
+  assert (extract_common (diff_rec l1 l2) = lcs_rec l1 l2).
   {
-    split.
-    2: split.
-    - unfold extract_first.
+    funelim (diff_rec l1 l2).
+    - autorewrite with lcs_rec.
+      unfold extract_common.
       rewrite filter_map_swap.
       rewrite filter_false.
       reflexivity.
-    - unfold extract_second.
-      rewrite filter_map_swap.
-      rewrite filter_true.
-      rewrite map_map.
-      cbn.
-      symmetry.
-      apply map_id.
-    - unfold extract_common.
-      rewrite filter_map_swap.
-      rewrite filter_false.
-      cbn.
-      split. split.
-      + exact nil_subseq_nil.
-      + apply nil_is_subseq_l.
-      + intros.
-        inversion H.
-        inversion H0.
-        apply le_n.
+    - autorewrite with lcs_rec.
+      unfold extract_comm
   }
-  
 Qed.
