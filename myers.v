@@ -688,16 +688,17 @@ Proof. (** HIDE *)
      | _ => false
      end) d)).
   split.
-  - unfold cost.
-    assert (
-      filter (fun '(t, _) => match t with | only_right => true | _ => false end) d
-      =
-      filter (fun '(t, _) => match t with | only_right => true | _ => false end)
-        (filter (fun '(t, _) => match t with | both => false | _ => true end) d)).
+  - clear H.
+    induction d as [| [t x] d' IH].
     {
-      rewrite filter_map.
+      cbn.
+      apply le_n.
     }
-
+    destruct t; cbn.
+    2: apply le_S.
+    3: apply le_n_S.
+    all: exact IH.
+  - unfold diagonal,cost,extract_left,extract_right.
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix

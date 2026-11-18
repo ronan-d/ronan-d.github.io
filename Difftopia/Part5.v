@@ -108,9 +108,9 @@ diff_rec (x1 :: l1') (x2 :: l2') :=
     let c1 := diff_rec l1' (x2 :: l2') in
     let c2 := diff_rec (x1 :: l1') l2' in
     if length c1 <=? length c2 then
-      (only_second, x2) :: c2
+      (only_second, x2) :: c1
     else
-      (only_first, x1) :: c1.
+      (only_first, x1) :: c2.
 Proof.
   all: lia.
 Qed.
@@ -126,12 +126,19 @@ Proof. (** HIDE *)
   assert (extract_common (diff_rec l1 l2) = lcs_rec l1 l2).
   {
     funelim (diff_rec l1 l2).
-    - autorewrite with lcs_rec.
-      unfold extract_common.
-      rewrite filter_map_swap.
-      rewrite filter_false.
+    1,2: autorewrite with lcs_rec;
+      unfold extract_common;
+      rewrite filter_map_swap;
+      rewrite filter_false;
       reflexivity.
-    - autorewrite with lcs_rec.
-      unfold extract_comm
+    autorewrite with lcs_rec.
+    destruct (T_eq x1 x2).
+    + cbn.
+      apply f_equal.
+      exact (H e).
+    + cbn.
+      specialize (H0 n).
+      specialize (H1 n).
+      rewrite H0,H1.
   }
 Qed.
