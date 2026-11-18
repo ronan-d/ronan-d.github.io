@@ -121,6 +121,7 @@ Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
 Proof. (** HIDE *)
   exists diff_rec.
   intros.
+  split.
   funelim (diff_rec l1 l2).
   {
     split.
@@ -136,5 +137,17 @@ Proof. (** HIDE *)
       cbn.
       symmetry.
       apply map_id.
+    - unfold extract_common.
+      rewrite filter_map_swap.
+      rewrite filter_false.
+      cbn.
+      split. split.
+      + exact nil_subseq_nil.
+      + apply nil_is_subseq_l.
+      + intros.
+        inversion H.
+        inversion H0.
+        apply le_n.
   }
+  
 Qed.
