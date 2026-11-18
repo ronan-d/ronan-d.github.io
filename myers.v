@@ -698,7 +698,10 @@ Proof. (** HIDE *)
     2: apply le_S.
     3: apply le_n_S.
     all: exact IH.
-  - unfold diagonal,cost,extract_left,extract_right.
+  - unfold diagonal,cost.
+    set (a1 := length (extract_left d)).
+    set (a2 := length (extract_right d)).
+
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
