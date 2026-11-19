@@ -77,6 +77,12 @@ Proof. (** HIDE *)
   assumption.
 Qed.
 
+(** We say that a diff [d] expands into two lists [l1] and [l2] if extracting the
+    first list of [d] gives [l1] and extracting the second list of [d] gives [l2]: *)
+
+Definition expands_into d l1 l2 :=
+  l1 = extract_first d /\ l2 = extract_second d.
+
 (** So far, the [diff] type we defined does not say anything about _longest_
     common subsequences. But, as we touched on in part 4, a proper diff of two
     lists [l1] and [l2] has a maximal common part. The following relation captures
@@ -139,7 +145,19 @@ Proof. (** HIDE *)
     + cbn.
       specialize (H0 n).
       specialize (H1 n).
-      assert (L : forall d1 d2, length d1 <= length d2 -> length (extract_common))
+      assert (
+        L1 : forall d l1 l2, is_diff d l1 l2 ->
+        length l1 + length l2 = 2 * length d - length (extract_common d)).
+      {
+        induction d as [| [t x] d' IH ].
+        {
+          intros.
+          destruct H2 as (H21 & H22 &_).
+          inversion H21; inversion H22; subst.
+          reflexivity.
+        }
+
+      }
       destruct (length (diff_rec l1' (x2 :: l2')) <=? length (diff_rec (x1 :: l1') l2')).
 
   }
