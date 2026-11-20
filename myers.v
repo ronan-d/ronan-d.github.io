@@ -543,6 +543,12 @@ Definition n3 (d : diff) : nat :=
 
 Theorem length_sum : forall d,
   length d = n1 d + n2 d + n3 d.
+Proof.
+  induction d as [| [t x] d' IH].
+  1: reflexivity.
+  unfold n1,n2,n3 in *.
+  destruct t; cbn; lia.
+Qed.
 
 Definition cost (d : diff) : nat :=
   length (filter (fun '(t, x) => match t with
