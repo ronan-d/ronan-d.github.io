@@ -86,7 +86,7 @@ Definition expands_into d l1 l2 :=
 (** Note that [expands_into d l1 l2] is not enough to say that [d] is a diff of
     [l1] and [l2]! A crucial ingredient is still missing; we'll add it later. *)
 
-(** **** Exercise: 1 star (trivial_expands_into)
+(** **** Exercise: 2 stars (trivial_expands_into)
 
     [expands_into] is much weaker that the notion of diff and there exist trivial
     procedures that, for any [l1] and [l2], return a diff that expands into [l1] and
@@ -99,20 +99,35 @@ Proof. (** HIDE *)
     map (fun x => (only_first, x)) l1 ++ map (fun x => (only_second, x)) l2).
   unfold expands_into.
   intros.
-  split.
-  - unfold extract_first.
-    rewrite filter_app.
-    rewrite map_app.
-    rewrite filter_map_swap.
-    rewrite filter_map_swap.
-    rewrite filter_true.
-    rewrite filter_false.
-    cbn.
-    rewrite app_nil_r.
-    rewrite map_map.
-    cbn.
-    rewrite map_id.
-    reflexivity.
+  split;
+  unfold extract_first,extract_second;
+  rewrite filter_app;
+  rewrite map_app;
+  rewrite filter_map_swap;
+  rewrite filter_map_swap;
+  rewrite filter_true;
+  rewrite filter_false.
+  1: rewrite app_nil_r.
+  2: rewrite app_nil_l.
+  all: rewrite map_map;
+  cbn;
+  rewrite map_id;
+  reflexivity.
+Qed.
+
+(** **** Exercise: 2 stars (length_extract)
+
+    Prove the following equality: *)
+
+Theorem length_extract : forall d,
+  length d + length (extract_common d) =
+  length (extract_first d) + length (extract_second d).
+Proof. (** HIDE *)
+  intros.
+  induction d as [| [t x] d' IH].
+  1: reflexivity.
+  unfold extract_first,extract_second,extract_common in *.
+  destruct t; cbn; lia.
 Qed.
 
 (** So far, the [diff] type we defined does not say anything about _longest_
