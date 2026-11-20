@@ -130,15 +130,13 @@ Proof. (** HIDE *)
   destruct t; cbn; lia.
 Qed.
 
-(** So far, the [diff] type we defined does not say anything about _longest_
-    common subsequences. But, as we touched on in part 4, a proper diff of two
-    lists [l1] and [l2] has a maximal common part. The following relation captures
-    this: *)
+(** So far, the [diff] type and the [expands_into] relation we defined do not say
+    anything about _longest_ common subsequences. But, as we touched on in part 4,
+    a proper diff of two lists [l1] and [l2] has a maximal common part. The
+    following relation captures this: *)
 
 Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
-  l1 = extract_first d /\
-  l2 = extract_second d /\
-  is_lcs (extract_common d) l1 l2.
+  expands_into d l1 l2 /\ is_lcs (extract_common d) l1 l2.
 
 (** Do you remember the [lcs_rec] procedure from part 3? It is possible
     and relatively simple to extend it into a procedure that returns a diff of

@@ -550,21 +550,16 @@ Proof.
   destruct t; cbn; lia.
 Qed.
 
-Definition cost (d : diff) : nat :=
-  length (filter (fun '(t, x) => match t with
-  | only_left | only_right => true
-  | both => false
-  end) d).
+Definition cost (d : diff) : nat := n1 d + n2 d.
 
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
    same diagonal. *)
-Definition reach (d : diff) : nat :=
-  length (extract_left d).
+Definition reach (d : diff) : nat := n1 d.
 
 Parameter (l1 l2 : list T).
 
 Definition diagonal (d : diff) : nat :=
-  length (extract_left d) + length l2 - length (extract_right d).
+  n1 d + length l2 - n2 d.
 
 Definition diag (index : Z) : list (T * T) := match index with
 | Z0 => combine l1 l2
