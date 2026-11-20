@@ -561,12 +561,6 @@ Parameter (l1 l2 : list T).
 Definition diagonal (d : diff) : nat :=
   n1 d + length l2 - n2 d.
 
-Definition diag (index : Z) : list (T * T) := match index with
-| Z0 => combine l1 l2
-| Zpos p => combine (skipn (PosDef.Pos.to_nat p) l1) l2
-| Zneg p => combine l1 (skipn (PosDef.Pos.to_nat p) l2)
-end.
-
 Definition strip_prefix (p l : list T) : list T :=
   skipn (length p) l.
 
@@ -704,11 +698,7 @@ Lemma myers_lemma1 : forall d,
   exists k, k <= cost d /\ diagonal d = length l2 - cost d + 2 * k.
 Proof. (** HIDE *)
   intros.
-  exists
-    (length (filter (fun '(t, _) => match t with
-     | only_right => true
-     | _ => false
-     end) d)).
+  exists (n2 d).
   split.
   - clear H.
     induction d as [| [t x] d' IH].
