@@ -83,6 +83,38 @@ Qed.
 Definition expands_into d l1 l2 :=
   l1 = extract_first d /\ l2 = extract_second d.
 
+(** Note that [expands_into d l1 l2] is not enough to say that [d] is a diff of
+    [l1] and [l2]! A crucial ingredient is still missing; we'll add it later. *)
+
+(** **** Exercise: 1 star (trivial_expands_into)
+
+    [expands_into] is much weaker that the notion of diff and there exist trivial
+    procedures that, for any [l1] and [l2], return a diff that expands into [l1] and
+    [l2]. Find one such procedure: *)
+
+Theorem trivial_expands_into :
+  exists (f : list T -> list T -> diff), forall l1 l2, expands_into (f l1 l2) l1 l2.
+Proof. (** HIDE *)
+  exists (fun l1 l2 =>
+    map (fun x => (only_first, x)) l1 ++ map (fun x => (only_second, x)) l2).
+  unfold expands_into.
+  intros.
+  split.
+  - unfold extract_first.
+    rewrite filter_app.
+    rewrite map_app.
+    rewrite filter_map_swap.
+    rewrite filter_map_swap.
+    rewrite filter_true.
+    rewrite filter_false.
+    cbn.
+    rewrite app_nil_r.
+    rewrite map_map.
+    cbn.
+    rewrite map_id.
+    reflexivity.
+Qed.
+
 (** So far, the [diff] type we defined does not say anything about _longest_
     common subsequences. But, as we touched on in part 4, a proper diff of two
     lists [l1] and [l2] has a maximal common part. The following relation captures
