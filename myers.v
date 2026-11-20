@@ -700,29 +700,11 @@ Proof. (** HIDE *)
   intros.
   exists (n2 d).
   split.
-  - clear H.
-    induction d as [| [t x] d' IH].
-    {
-      cbn.
-      apply le_n.
-    }
-    destruct t; cbn.
-    2: apply le_S.
-    3: apply le_n_S.
-    all: exact IH.
+  - unfold cost.
+    assert (E := length_sum d).
+    lia.
   - unfold diagonal,cost.
-    Check Nat.sub_diag.
-    Search (?a - ?b).
-    clear H.
-    induction d as [| [t x] d' IH ].
-    {
-      cbn.
-      lia.
-    }
-    cbn.
-    destruct t.
-    cbn.
-    cbn in IH.
+    
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
