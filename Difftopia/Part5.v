@@ -138,6 +138,38 @@ Qed.
 Definition is_diff (d : diff) (l1 l2 : list T) : Prop :=
   expands_into d l1 l2 /\ is_lcs (extract_common d) l1 l2.
 
+(** Exercise: 2 stars (lcs_shortest_diff)
+
+    Prove that when [expands_into d l1 l2], [extract_common d] is an LCS of [l1]
+    and [l2] if and only if [d] is not longer than any diff that expands into [l1]
+    and [l2]: *)
+
+Theorem lcs_shortest_diff : forall d l1 l2,
+  expands_into d l1 l2 ->
+  (is_lcs (extract_common d) l1 l2) <->
+  (forall d', expands_into d' l1 l2 -> length d <= length d').
+Proof. (** HIDE *)
+  intros.
+  split; intros.
+  - assert (E1 := length_extract d).
+    rewrite <- (proj1 H) in E1.
+    rewrite <- (proj2 H) in E1.
+    assert (E2 := length_extract d').
+    rewrite <- (proj1 H1) in E2.
+    rewrite <- (proj2 H1) in E2.
+    destruct H0 as [_ H0].
+    specialize (H0 (extract_common d')).
+    assert (is_common_subseq (extract_common d') l1 l2).
+    {
+      rewrite (proj1 H1).
+      rewrite (proj2 H1).
+      apply extract_common_is_common_subseq.
+    }
+    specialize (H0 H2).
+    lia.
+  - unfold is_lc
+Qed.
+
 (** Do you remember the [lcs_rec] procedure from part 3? It is possible
     and relatively simple to extend it into a procedure that returns a diff of
     [l1] and [l2] instead of just an LCS of [l1] and [l2]. *)
