@@ -523,6 +523,27 @@ Proof.
         exact IH.
 Qed.
 
+Definition n1 (d : diff) : nat :=
+  length (filter (fun '(t, x) => match t with
+  | only_left => true
+  | _ => false
+  end) d).
+
+Definition n2 (d : diff) : nat :=
+  length (filter (fun '(t, x) => match t with
+  | only_right => true
+  | _ => false
+  end) d).
+
+Definition n3 (d : diff) : nat :=
+  length (filter (fun '(t, x) => match t with
+  | both => true
+  | _ => false
+  end) d).
+
+Theorem length_sum : forall d,
+  length d = n1 d + n2 d + n3 d.
+
 Definition cost (d : diff) : nat :=
   length (filter (fun '(t, x) => match t with
   | only_left | only_right => true
@@ -699,9 +720,18 @@ Proof. (** HIDE *)
     3: apply le_n_S.
     all: exact IH.
   - unfold diagonal,cost.
-    set (a1 := length (extract_left d)).
-    set (a2 := length (extract_right d)).
-
+    Check Nat.sub_diag.
+    Search (?a - ?b).
+    clear H.
+    induction d as [| [t x] d' IH ].
+    {
+      cbn.
+      lia.
+    }
+    cbn.
+    destruct t.
+    cbn.
+    cbn in IH.
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
