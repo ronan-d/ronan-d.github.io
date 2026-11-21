@@ -167,7 +167,9 @@ Proof. (** HIDE *)
     }
     specialize (H0 H2).
     lia.
-  - unfold is_lc
+  - unfold is_lcs.
+    split.
+    + rewrite (proj1 H),(proj2 H).
 Qed.
 
 (** Do you remember the [lcs_rec] procedure from part 3? It is possible
