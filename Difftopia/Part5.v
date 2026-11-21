@@ -130,6 +130,20 @@ Proof. (** HIDE *)
   destruct t; cbn; lia.
 Qed.
 
+(** Another interesting property: for every common subsequence [s] of two lists [l1]
+    and [l2], it is possible to construct a diff that expands into [l1] and [l2] and
+    whose common part is [s]. That the subject of the next exercise. *)
+
+(** **** Exercise: 3 starts (exists_diff_of_cs)
+
+    Prove the following theorem: *)
+
+Theorem exists_diff_of_cs : forall s l1 l2,
+  is_common_subseq s l1 l2 ->
+  exists d, expands_into d l1 l2 /\ extract_common d = s.
+Proof.
+Qed.
+
 (** So far, the [diff] type and the [expands_into] relation we defined do not say
     anything about _longest_ common subsequences. But, as we touched on in part 4,
     a proper diff of two lists [l1] and [l2] has a maximal common part. The
@@ -170,6 +184,9 @@ Proof. (** HIDE *)
   - unfold is_lcs.
     split.
     + rewrite (proj1 H),(proj2 H).
+      apply extract_common_is_common_subseq.
+    + intros.
+      
 Qed.
 
 (** Do you remember the [lcs_rec] procedure from part 3? It is possible
