@@ -134,14 +134,38 @@ Qed.
     and [l2], it is possible to construct a diff that expands into [l1] and [l2] and
     whose common part is [s]. That the subject of the next exercise. *)
 
-(** **** Exercise: 3 starts (exists_diff_of_cs)
+(** **** Exercise: 3 stars (exists_diff_of_cs)
 
     Prove the following theorem: *)
 
 Theorem exists_diff_of_cs : forall s l1 l2,
   is_common_subseq s l1 l2 ->
   exists d, expands_into d l1 l2 /\ extract_common d = s.
-Proof.
+Proof. (** HIDE *)
+  intros s l1 l2 [H1 H2].
+  induction H1.
+  - exists (map (fun x => (only_second, x)) l2).
+    split.
+    + unfold expands_into,extract_first,extract_second.
+      rewrite filter_map_swap.
+      rewrite filter_map_swap.
+      rewrite filter_true,filter_false.
+      rewrite map_map.
+      rewrite map_map.
+      cbn.
+      split. reflexivity.
+      symmetry.
+      apply map_id.
+    + unfold extract_common.
+      rewrite filter_map_swap.
+      rewrite filter_false.
+      reflexivity.
+  - inversion H2. subst.
+    rename l4 into l2.
+    destruct IHis_subseq as [d' IH].
+    1: apply tail_of_subseq_is_subseq with (x := x);
+       assumption.
+    + 
 Qed.
 
 (** So far, the [diff] type and the [expands_into] relation we defined do not say

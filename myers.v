@@ -550,6 +550,16 @@ Proof.
   destruct t; cbn; lia.
 Qed.
 
+Theorem length_sum_left : forall d,
+  length (extract_left d) = n1 d + n3 d.
+Proof.
+  induction d.
+  1: reflexivity.
+  unfold extract_left,n1,n3 in *.
+  cbn in *.
+  destruct t.
+Qed.
+
 Definition cost (d : diff) : nat := n1 d + n2 d.
 
 (* It only makes sense to compare reach d1 with reach d2 if d1 and d2 are on the
@@ -704,7 +714,13 @@ Proof. (** HIDE *)
     assert (E := length_sum d).
     lia.
   - unfold diagonal,cost.
-    
+    assert (L1 := length_sum d).
+    assert (L2 : n2 d <= length l2).
+    {
+      unfold
+    }
+    Check Nat.sub_diag.
+    Search (_ - _).
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
