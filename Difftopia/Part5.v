@@ -143,7 +143,8 @@ Theorem exists_diff_of_cs : forall s l1 l2,
   exists d, expands_into d l1 l2 /\ extract_common d = s.
 Proof. (** HIDE *)
   intros s l1 l2 [H1 H2].
-  induction H1.
+  generalize dependent l2.
+  induction H1 as [| x s' l1' H1 IH | x1 s l1' H1 IH]; intros.
   - exists (map (fun x => (only_second, x)) l2).
     split.
     + unfold expands_into,extract_first,extract_second.
@@ -160,12 +161,20 @@ Proof. (** HIDE *)
       rewrite filter_map_swap.
       rewrite filter_false.
       reflexivity.
-  - inversion H2. subst.
-    rename l4 into l2.
-    destruct IHis_subseq as [d' IH].
-    1: apply tail_of_subseq_is_subseq with (x := x);
-       assumption.
-    + 
+  - inversion H2 as [| x0 s2' l2' H2' | x2 s l2' H2']. subst.
+    + destruct (IH l2') as [d' IH0].
+      1: assumption.
+      exists ((both, x) :: d').
+      unfold expands_into,extract_first,extract_second,extract_common in *.
+      split. split.
+      all: cbn;
+      apply f_equal.
+      * exact (proj1 (proj1 IH0)).
+      * exact (proj2 (proj1 IH0)).
+      * exact (proj2 IH0).
+    + destruct (IH l2).
+      1: apply tail_of_subseq_is_subseq with (x := x); assumption.
+      
 Qed.
 
 (** So far, the [diff] type and the [expands_into] relation we defined do not say

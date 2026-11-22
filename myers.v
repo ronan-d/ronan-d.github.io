@@ -713,7 +713,7 @@ Definition is_best_at_cost_on_diag (d : diff) : Prop :=
 
 Lemma myers_lemma1 : forall d,
   is_path d ->
-  exists k, k <= cost d /\ diagonal d = length l2 - cost d + 2 * k.
+  exists k, k <= cost d /\ diagonal d = length l2 + 2 * k - cost d.
 Proof. (** HIDE *)
   intros.
   exists (n2 d).
