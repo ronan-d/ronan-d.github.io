@@ -240,7 +240,16 @@ Proof. (** HIDE *)
     + rewrite (proj1 H),(proj2 H).
       apply extract_common_is_common_subseq.
     + intros.
-      
+      destruct (exists_diff_of_cs _ _ _ H1) as [d' Hd'].
+      specialize (H0 d' (proj1 Hd')).
+      rewrite <- (proj2 Hd').
+      assert (L := length_extract d).
+      assert (L' := length_extract d').
+      destruct H as [H01 H02].
+      rewrite <- H01,<- H02 in L.
+      destruct Hd' as [[Hd'1 Hd'2] _].
+      rewrite <- Hd'1, <- Hd'2 in L'.
+      lia.
 Qed.
 
 (** Do you remember the [lcs_rec] procedure from part 3? It is possible
