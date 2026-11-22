@@ -161,8 +161,11 @@ Proof. (** HIDE *)
       rewrite filter_map_swap.
       rewrite filter_false.
       reflexivity.
-  - inversion H2 as [| x0 s2' l2' H2' | x2 s l2' H2']. subst.
-    + destruct (IH l2') as [d' IH0].
+  - remember (x :: s') as s eqn:E.
+    induction H2 as [| x0 s2' l2' H2' IH2 | x2 s l2' H2' IH2]. subst.
+    + inversion E.
+    + inversion E; subst.
+      destruct (IH l2') as [d' IH0].
       1: assumption.
       exists ((both, x) :: d').
       unfold expands_into,extract_first,extract_second,extract_common in *.
@@ -172,9 +175,27 @@ Proof. (** HIDE *)
       * exact (proj1 (proj1 IH0)).
       * exact (proj2 (proj1 IH0)).
       * exact (proj2 IH0).
-    + destruct (IH l2).
-      1: apply tail_of_subseq_is_subseq with (x := x); assumption.
-      
+    + destruct (IH2 E) as [d' Hd'].
+      exists ((only_second, x2) :: d').
+      unfold expands_into,extract_common,extract_first,extract_second.
+      split. split.
+      * exact (proj1 (proj1 Hd')).
+      * cbn.
+        apply f_equal.
+        exact (proj2 (proj1 Hd')).
+      * cbn.
+        exact (proj2 Hd').
+  - destruct (IH l2) as [d' IHd'].
+    1: assumption.
+    exists ((only_first, x1) :: d').
+    split. split.
+    + cbn.
+      apply f_equal.
+      exact (proj1 (proj1 IHd')).
+    + cbn.
+      exact (proj2 (proj1 IHd')).
+    + cbn.
+      exact (proj2 IHd').
 Qed.
 
 (** So far, the [diff] type and the [expands_into] relation we defined do not say
