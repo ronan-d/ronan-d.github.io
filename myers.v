@@ -553,11 +553,19 @@ Qed.
 Theorem length_sum_left : forall d,
   length (extract_left d) = n1 d + n3 d.
 Proof.
-  induction d.
+  induction d as [| [t x] d' IH].
   1: reflexivity.
   unfold extract_left,n1,n3 in *.
-  cbn in *.
-  destruct t.
+  destruct t; cbn in *; lia.
+Qed.
+
+Theorem length_sum_right : forall d,
+  length (extract_right d) = n2 d + n3 d.
+Proof.
+  induction d as [| [t x] d' IH].
+  1: reflexivity.
+  unfold extract_right,n2,n3 in *.
+  destruct t; cbn in *; lia.
 Qed.
 
 Definition cost (d : diff) : nat := n1 d + n2 d.
@@ -717,10 +725,14 @@ Proof. (** HIDE *)
     assert (L1 := length_sum d).
     assert (L2 : n2 d <= length l2).
     {
-      unfold
+      assert (L0 := length_sum_right d).
+      destruct H.
+      unfold is_prefix in H0.
+      rewrite H0 in L0.
+      rewrite length_firstn in L0.
+      lia.
     }
-    Check Nat.sub_diag.
-    Search (_ - _).
+    lia.
 Qed.
 
 Definition available_lcp (d : diff) := longest_common_prefix
