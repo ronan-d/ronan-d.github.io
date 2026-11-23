@@ -753,9 +753,7 @@ Proof.
   apply f_equal;
   [unfold extract_left | unfold extract_right];
   rewrite filter_map_swap;
-  rewrite filter_ext with (g := fun _ => true).
-  2,4: reflexivity.
-  all: rewrite filter_true;
+  rewrite filter_true;
   rewrite map_map;
   cbn;
   rewrite map_id;
