@@ -716,7 +716,7 @@ Lemma myers_lemma1 : forall d,
   exists k, k <= cost d /\ diagonal d = length l2 + 2 * k - cost d.
 Proof. (** HIDE *)
   intros.
-  exists (n2 d).
+  exists (n1 d).
   split.
   - unfold cost.
     assert (E := length_sum d).

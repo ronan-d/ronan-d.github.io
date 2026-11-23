@@ -304,20 +304,8 @@ Proof. (** HIDE *)
     + cbn.
       specialize (H0 n).
       specialize (H1 n).
-      assert (
-        L1 : forall d l1 l2, is_diff d l1 l2 ->
-        length l1 + length l2 = 2 * length d - length (extract_common d)).
-      {
-        induction d as [| [t x] d' IH ].
-        {
-          intros.
-          destruct H2 as (H21 & H22 &_).
-          inversion H21; inversion H22; subst.
-          reflexivity.
-        }
-
-      }
       destruct (length (diff_rec l1' (x2 :: l2')) <=? length (diff_rec (x1 :: l1') l2')).
-
+      * assert (length (lcs_rec l1' (x2 :: l2')) <= length (lcs_rec (x1 :: l1') l2')).
+        
   }
 Qed.
