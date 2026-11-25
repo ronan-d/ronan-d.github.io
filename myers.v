@@ -792,6 +792,7 @@ Proof.
   set (nb1 := length (extract_left db)).
   set (nb2 := length (extract_right db)).
   set (m := na2 - na1).
+  Search extract_left.
   assert (nb2 - na2 = m).
   {
     unfold diagonal in H1.

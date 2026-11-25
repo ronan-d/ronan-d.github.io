@@ -286,26 +286,4 @@ Theorem exists_diff_rec : exists (f : list T -> list T -> diff),
 Proof. (** HIDE *)
   exists diff_rec.
   intros.
-  split. 2: split.
-  1,2: shelve.
-  assert (extract_common (diff_rec l1 l2) = lcs_rec l1 l2).
-  {
-    funelim (diff_rec l1 l2).
-    1,2: autorewrite with lcs_rec;
-      unfold extract_common;
-      rewrite filter_map_swap;
-      rewrite filter_false;
-      reflexivity.
-    autorewrite with lcs_rec.
-    destruct (T_eq x1 x2).
-    + cbn.
-      apply f_equal.
-      exact (H e).
-    + cbn.
-      specialize (H0 n).
-      specialize (H1 n).
-      destruct (length (diff_rec l1' (x2 :: l2')) <=? length (diff_rec (x1 :: l1') l2')).
-      * assert (length (lcs_rec l1' (x2 :: l2')) <= length (lcs_rec (x1 :: l1') l2')).
-        
-  }
 Qed.
